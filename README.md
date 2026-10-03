@@ -30,3 +30,8 @@ GET /api/sensores/sensor-01/lecturas?from=2026-10-01T00:00:00Z&to=2026-10-03T00:
 ```
 
 Ejecuta las pruebas desde `basica/` con `.\mvnw.cmd test`. Utilizan una base H2 en memoria y no requieren PostgreSQL.
+## Épica 5: Sistema de Registro de Lecturas de Sensores IoT (Telemetría Básica)
+
+### Alexa.
+
+![](screenshots\image.png)

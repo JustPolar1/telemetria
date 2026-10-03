@@ -9,7 +9,7 @@ public record TelemetryReadingResponse(
 		SensorMetric metric,
 		BigDecimal value,
 		Instant measuredAt,
-		Instant receivedAt) {
+		Instant recordedAt) {
 
 	public static TelemetryReadingResponse from(TelemetryReading reading) {
 		return new TelemetryReadingResponse(
@@ -18,6 +18,6 @@ public record TelemetryReadingResponse(
 				reading.getMetric(),
 				reading.getValue(),
 				reading.getMeasuredAt(),
-				reading.getReceivedAt());
+				reading.getRecordedAt());
 	}
 }

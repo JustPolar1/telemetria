@@ -47,7 +47,7 @@ class TelemetryReadingControllerTests {
 				.andExpect(header().exists("Location"))
 				.andExpect(jsonPath("$.id").isNumber())
 				.andExpect(jsonPath("$.sensorId").value("sensor-01"))
-				.andExpect(jsonPath("$.receivedAt").exists());
+				.andExpect(jsonPath("$.recordedAt").exists());
 	}
 
 	@Test

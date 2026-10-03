@@ -12,15 +12,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class TelemetryReadingService {
 
 	private final TelemetryReadingRepository repository;
+	private final SensorRepository sensorRepository;
 
-	public TelemetryReadingService(TelemetryReadingRepository repository) {
+	public TelemetryReadingService(TelemetryReadingRepository repository, SensorRepository sensorRepository) {
 		this.repository = repository;
+		this.sensorRepository = sensorRepository;
 	}
 
 	@Transactional
 	public TelemetryReadingResponse receive(TelemetryReadingRequest request) {
+		String sensorId = request.sensorId().trim();
+		Sensor sensor = sensorRepository.findById(sensorId)
+				.orElseGet(() -> sensorRepository.save(new Sensor(sensorId)));
 		TelemetryReading reading = new TelemetryReading(
-				request.sensorId().trim(),
+				sensor,
 				request.metric(),
 				request.value(),
 				request.measuredAt());
@@ -40,14 +45,14 @@ public class TelemetryReadingService {
 		PageRequest pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "measuredAt"));
 		Page<TelemetryReading> readings;
 		if (from != null && to != null) {
-			readings = repository.findBySensorIdAndMeasuredAtGreaterThanEqualAndMeasuredAtLessThanEqual(
+			readings = repository.findBySensor_SensorIdAndMeasuredAtGreaterThanEqualAndMeasuredAtLessThanEqual(
 					sensorId, from, to, pageable);
 		} else if (from != null) {
-			readings = repository.findBySensorIdAndMeasuredAtGreaterThanEqual(sensorId, from, pageable);
+			readings = repository.findBySensor_SensorIdAndMeasuredAtGreaterThanEqual(sensorId, from, pageable);
 		} else if (to != null) {
-			readings = repository.findBySensorIdAndMeasuredAtLessThanEqual(sensorId, to, pageable);
+			readings = repository.findBySensor_SensorIdAndMeasuredAtLessThanEqual(sensorId, to, pageable);
 		} else {
-			readings = repository.findBySensorId(sensorId, pageable);
+			readings = repository.findBySensor_SensorId(sensorId, pageable);
 		}
 		return readings.map(TelemetryReadingResponse::from);
 	}

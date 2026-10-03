@@ -8,14 +8,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TelemetryReadingRepository extends JpaRepository<TelemetryReading, Long> {
 
-	Page<TelemetryReading> findBySensorIdAndMeasuredAtGreaterThanEqualAndMeasuredAtLessThanEqual(
+	Page<TelemetryReading> findBySensor_SensorIdAndMeasuredAtGreaterThanEqualAndMeasuredAtLessThanEqual(
 			String sensorId, Instant from, Instant to, Pageable pageable);
 
-	Page<TelemetryReading> findBySensorIdAndMeasuredAtGreaterThanEqual(
+	Page<TelemetryReading> findBySensor_SensorIdAndMeasuredAtGreaterThanEqual(
 			String sensorId, Instant from, Pageable pageable);
 
-	Page<TelemetryReading> findBySensorIdAndMeasuredAtLessThanEqual(
+	Page<TelemetryReading> findBySensor_SensorIdAndMeasuredAtLessThanEqual(
 			String sensorId, Instant to, Pageable pageable);
 
-	Page<TelemetryReading> findBySensorId(String sensorId, Pageable pageable);
+	Page<TelemetryReading> findBySensor_SensorId(String sensorId, Pageable pageable);
 }

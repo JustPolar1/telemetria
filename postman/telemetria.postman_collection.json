@@ -1,0 +1,146 @@
+{
+  "info": {
+    "_postman_id": "b7fbc353-310f-4827-8ebf-4279394627a3",
+    "name": "API de telemetría",
+    "description": "Pruebas para registrar lecturas y consultarlas desde PostgreSQL.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "sensorId",
+      "value": "sensor-01"
+    }
+  ],
+  "item": [
+    {
+      "name": "Registrar lectura de temperatura",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sensorId\": \"{{sensorId}}\",\n  \"metric\": \"TEMPERATURE\",\n  \"value\": 22.75,\n  \"measuredAt\": \"2026-10-02T18:30:00Z\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/lecturas",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "lecturas"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('La lectura se creó', function () {",
+              "    pm.response.to.have.status(201);",
+              "    const body = pm.response.json();",
+              "    pm.expect(body.sensorId).to.eql(pm.collectionVariables.get('sensorId'));",
+              "    pm.expect(body.recordedAt).to.exist;",
+              "    pm.collectionVariables.set('readingId', body.id);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Consultar lecturas del sensor",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/sensores/{{sensorId}}/lecturas?page=0&size=20",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "sensores",
+            "{{sensorId}}",
+            "lecturas"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "20"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('El historial del sensor se consulta', function () {",
+              "    pm.response.to.have.status(200);",
+              "    pm.expect(pm.response.json().content).to.be.an('array');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Filtrar lecturas por fechas",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/sensores/{{sensorId}}/lecturas?from=2026-10-01T00:00:00Z&to=2026-10-03T00:00:00Z&page=0&size=20",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "sensores",
+            "{{sensorId}}",
+            "lecturas"
+          ],
+          "query": [
+            {
+              "key": "from",
+              "value": "2026-10-01T00:00:00Z"
+            },
+            {
+              "key": "to",
+              "value": "2026-10-03T00:00:00Z"
+            },
+            {
+              "key": "page",
+              "value": "0"
+            },
+            {
+              "key": "size",
+              "value": "20"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

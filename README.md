@@ -1,10 +1,30 @@
 # API básica de recepción de telemetría
 
-Servicio Spring Boot para guardar lecturas de temperatura y humedad en PostgreSQL y consultarlas por sensor.
+Servicio Spring Boot para guardar lecturas de sensores y administrar parcelas comunitarias en PostgreSQL.
+
+## Parcelas
+
+La API administra parcelas mediante `POST /api/v1/parcels`, `GET /api/v1/parcels` y `GET /api/v1/parcels/{id}`. El esquema de PostgreSQL está en [02-parcels.sql](./databases/init/02-parcels.sql). Hibernate valida el esquema al iniciar y no lo modifica.
+
+`POST /api/v1/parcels` recibe nombre, ubicación GPS, tipo de suelo y responsable. Los tipos permitidos son `ARCILLOSO`, `LIMOSO` y `ARENOSO`.
+
+```json
+{
+  "name": "Huerto comunitario norte",
+  "location": {
+    "latitude": 28.6353,
+    "longitude": -106.0889
+  },
+  "soilType": "LIMOSO",
+  "ownerOrLead": "Comunidad vecinal"
+}
+```
+
+Los textos requeridos se validan y recortan en los extremos; las coordenadas deben estar dentro de los rangos GPS. Una parcela inexistente devuelve `404` con un mensaje de error.
 
 ## Ejecución local
 
-La aplicación usa PostgreSQL. La entidad se adapta al esquema de [01-sensors.sql](./databases/init/01-sensors.sql): tablas `sensors` y `sensor_readings`, tipos en minúsculas y columnas `measured_value` y `recorded_at`. Hibernate valida el esquema al iniciar; no lo modifica. Al recibir una lectura, la API registra el sensor en `sensors` si aún no existe y guarda la medición asociada.
+La aplicación usa PostgreSQL. El esquema consta de [01-sensors.sql](./databases/init/01-sensors.sql) para sensores y lecturas, y [02-parcels.sql](./databases/init/02-parcels.sql) para parcelas. Hibernate valida el esquema al iniciar; no lo modifica. Al recibir una lectura, la API registra el sensor en `sensors` si aún no existe y guarda la medición asociada.
 
 Si todavía no tienes PostgreSQL, puedes crear una instancia local con Docker. Ejecuta este comando desde la raíz del repositorio:
 
@@ -18,7 +38,12 @@ docker run --name telemetria-postgres `
   -d postgres:17
 ```
 
-El script de inicialización de Docker solo se aplica al crear el contenedor y la base por primera vez. Si la base ya existe, ejecuta el SQL manualmente con `psql -h localhost -U telemetria -d telemetria -f databases/init/01-sensors.sql`.
+Los scripts de inicialización de Docker solo se aplican al crear el contenedor y la base por primera vez. Si la base ya existe, ejecuta ambos archivos SQL manualmente desde la raíz del repositorio:
+
+```powershell
+psql -h localhost -U telemetria -d telemetria -f databases/init/01-sensors.sql
+psql -h localhost -U telemetria -d telemetria -f databases/init/02-parcels.sql
+```
 
 Configura `DB_URL`, `DB_USERNAME` y `DB_PASSWORD` con los datos de tu PostgreSQL. Para la instancia Docker anterior, los valores predeterminados de la aplicación ya coinciden. Para un servidor distinto, define las variables antes de iniciar. En PowerShell:
 

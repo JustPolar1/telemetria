@@ -2,6 +2,9 @@ package com.telemetria.basica.telemetry;
 
 import java.time.Instant;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,6 +49,16 @@ public class TelemetryReadingService {
 		if (!valid) {
 			throw new InvalidMeasurementException(metric);
 		}
+	}
+
+	@Transactional(readOnly = true)
+	public List<TelemetryReadingResponse> findLatestBySensor(String sensorId) {
+		return Arrays.stream(SensorMetric.values())
+				.map(metric -> repository
+						.findFirstBySensor_SensorIdAndMetricOrderByMeasuredAtDescIdDesc(sensorId, metric))
+				.flatMap(Optional::stream)
+				.map(TelemetryReadingResponse::from)
+				.toList();
 	}
 
 	@Transactional(readOnly = true)

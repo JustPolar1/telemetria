@@ -8,5 +8,10 @@ CREATE TABLE IF NOT EXISTS parcels (
     soil_type VARCHAR(20) NOT NULL
         CHECK (soil_type IN ('arcilloso', 'limoso', 'arenoso')),
     owner_or_lead VARCHAR(150) NOT NULL,
+    sensor_id VARCHAR(100),
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE UNIQUE INDEX IF NOT EXISTS uk_parcels_sensor_id
+    ON parcels (sensor_id)
+    WHERE sensor_id IS NOT NULL;

@@ -28,7 +28,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"name\": \"Huerto comunitario norte\",\n  \"location\": {\n    \"latitude\": 28.6353,\n    \"longitude\": -106.0889\n  },\n  \"soilType\": \"LIMOSO\",\n  \"ownerOrLead\": \"Comunidad vecinal\"\n}",
+          "raw": "{\n  \"name\": \"Huerto comunitario norte\",\n  \"location\": {\n    \"latitude\": 28.6353,\n    \"longitude\": -106.0889\n  },\n  \"soilType\": \"LIMOSO\",\n  \"ownerOrLead\": \"Comunidad vecinal\",\n  \"sensorId\": \"sensor-01\"\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -111,7 +111,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"name\": \"Huerto comunitario actualizado\",\n  \"location\": {\n    \"latitude\": 28.6353,\n    \"longitude\": -106.0889\n  },\n  \"soilType\": \"ARCILLOSO\",\n  \"ownerOrLead\": \"Equipo de voluntarios\"\n}",
+          "raw": "{\n  \"name\": \"Huerto comunitario actualizado\",\n  \"location\": {\n    \"latitude\": 28.6353,\n    \"longitude\": -106.0889\n  },\n  \"soilType\": \"ARCILLOSO\",\n  \"ownerOrLead\": \"Equipo de voluntarios\",\n  \"sensorId\": \"sensor-01\"\n}",
           "options": {
             "raw": {
               "language": "json"

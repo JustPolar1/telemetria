@@ -19,5 +19,9 @@ public record ParcelRequest(
 		@NotBlank(message = "El responsable es obligatorio")
 		@Size(max = 150, message = "El responsable no puede exceder 150 caracteres")
 		@Pattern(regexp = "^[^\\p{Cc}<>]*$", message = "El responsable contiene caracteres o marcas no permitidos")
-		String ownerOrLead) {
+		String ownerOrLead,
+		@NotBlank(message = "El identificador del sensor es obligatorio")
+		@Size(max = 100, message = "El identificador del sensor no puede exceder 100 caracteres")
+		@Pattern(regexp = "^[A-Za-z0-9._:-]+$", message = "El identificador del sensor contiene caracteres no permitidos")
+		String sensorId) {
 }

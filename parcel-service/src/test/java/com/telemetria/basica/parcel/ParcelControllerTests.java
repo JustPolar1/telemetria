@@ -8,6 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,9 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -28,9 +35,14 @@ class ParcelControllerTests {
 	@Autowired
 	private ParcelRepository repository;
 
+	@MockitoBean
+	private TelemetryClient telemetryClient;
+
 	@BeforeEach
 	void clearParcels() {
 		repository.deleteAll();
+		when(telemetryClient.findLatestReadings(org.mockito.ArgumentMatchers.anyString()))
+				.thenReturn(List.of());
 	}
 
 	@Test
@@ -45,7 +57,8 @@ class ParcelControllerTests {
 						    "longitude": -106.0889
 						  },
 						  "soilType": "LIMOSO",
-						  "ownerOrLead": "  Comunidad vecinal  "
+						  "ownerOrLead": "  Comunidad vecinal  ",
+						  "sensorId": "sensor-01"
 						}
 						"""))
 				.andExpect(status().isCreated())
@@ -54,6 +67,7 @@ class ParcelControllerTests {
 				.andExpect(jsonPath("$.name").value("Huerto Norte"))
 				.andExpect(jsonPath("$.location.latitude").value(28.6353))
 				.andExpect(jsonPath("$.soilType").value("LIMOSO"))
+				.andExpect(jsonPath("$.sensorId").value("sensor-01"))
 				.andExpect(jsonPath("$.ownerOrLead").value("Comunidad vecinal"))
 				.andExpect(jsonPath("$.createdAt").exists());
 	}
@@ -70,7 +84,8 @@ class ParcelControllerTests {
 						    "longitude": -99.1332
 						  },
 						  "soilType": "ARCILLOSO",
-						  "ownerOrLead": "Equipo de investigación"
+						  "ownerOrLead": "Equipo de investigación",
+						  "sensorId": "sensor-02"
 						}
 						"""))
 				.andExpect(status().isCreated())
@@ -87,7 +102,10 @@ class ParcelControllerTests {
 		mockMvc.perform(get("/api/v1/parcels/{id}", id))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").value(id))
-				.andExpect(jsonPath("$.soilType").value("ARCILLOSO"));
+				.andExpect(jsonPath("$.soilType").value("ARCILLOSO"))
+				.andExpect(jsonPath("$.sensorId").value("sensor-02"))
+				.andExpect(jsonPath("$.telemetryStatus").value("NO_DATA"))
+				.andExpect(jsonPath("$.latestReadings").isEmpty());
 	}
 
 	@Test
@@ -102,7 +120,8 @@ class ParcelControllerTests {
 						    "longitude": -106
 						  },
 						  "soilType": "ARENOSO",
-						  "ownerOrLead": "Comunidad vecinal"
+						  "ownerOrLead": "Comunidad vecinal",
+						  "sensorId": "sensor-03"
 						}
 						"""))
 				.andExpect(status().isBadRequest())
@@ -121,7 +140,8 @@ class ParcelControllerTests {
 						    "longitude": -106
 						  },
 						  "soilType": "ARENOSO",
-						  "ownerOrLead": "Comunidad vecinal"
+						  "ownerOrLead": "Comunidad vecinal",
+						  "sensorId": "sensor-04"
 						}
 						"""))
 				.andExpect(status().isBadRequest())
@@ -148,7 +168,8 @@ class ParcelControllerTests {
 						    "longitude": -106.1
 						  },
 						  "soilType": "ARENOSO",
-						  "ownerOrLead": "Responsable inicial"
+						  "ownerOrLead": "Responsable inicial",
+						  "sensorId": "sensor-05"
 						}
 						"""))
 				.andExpect(status().isCreated())
@@ -167,7 +188,8 @@ class ParcelControllerTests {
 						    "longitude": -99.1
 						  },
 						  "soilType": "LIMOSO",
-						  "ownerOrLead": "Nuevo responsable"
+						  "ownerOrLead": "Nuevo responsable",
+						  "sensorId": "sensor-05"
 						}
 						"""))
 				.andExpect(status().isOk())
@@ -178,5 +200,101 @@ class ParcelControllerTests {
 				.andExpect(status().isNoContent());
 		mockMvc.perform(get("/api/v1/parcels/{id}", id))
 				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	void includesLatestSensorReadingsInParcelDetails() throws Exception {
+		when(telemetryClient.findLatestReadings("sensor-06"))
+				.thenReturn(List.of(new TelemetryReadingSnapshot(
+						17L,
+						"sensor-06",
+						"PH",
+						new BigDecimal("6.5"),
+						Instant.parse("2026-10-02T18:30:00Z"),
+						Instant.parse("2026-10-02T18:31:00Z"))));
+
+		String location = mockMvc.perform(post("/api/v1/parcels")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{
+						  "name": "Huerto con datos",
+						  "location": {
+						    "latitude": 28,
+						    "longitude": -106
+						  },
+						  "soilType": "LIMOSO",
+						  "ownerOrLead": "Comunidad",
+						  "sensorId": "sensor-06"
+						}
+						"""))
+				.andExpect(status().isCreated())
+				.andReturn()
+				.getResponse()
+				.getHeader("Location");
+		String id = location.substring(location.lastIndexOf('/') + 1);
+
+		mockMvc.perform(get("/api/v1/parcels/{id}", id))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.telemetryStatus").value("AVAILABLE"))
+				.andExpect(jsonPath("$.latestReadings.length()").value(1))
+				.andExpect(jsonPath("$.latestReadings[0].metric").value("PH"))
+				.andExpect(jsonPath("$.latestReadings[0].value").value(6.5));
+	}
+
+	@Test
+	void returnsServiceUnavailableWhenTelemetryCannotBeReached() throws Exception {
+		when(telemetryClient.findLatestReadings("sensor-07"))
+				.thenThrow(new TelemetryServiceUnavailableException(new IllegalStateException("offline")));
+
+		String location = mockMvc.perform(post("/api/v1/parcels")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{
+						  "name": "Huerto sin conexión",
+						  "location": {
+						    "latitude": 28,
+						    "longitude": -106
+						  },
+						  "soilType": "LIMOSO",
+						  "ownerOrLead": "Comunidad",
+						  "sensorId": "sensor-07"
+						}
+						"""))
+				.andExpect(status().isCreated())
+				.andReturn()
+				.getResponse()
+				.getHeader("Location");
+		String id = location.substring(location.lastIndexOf('/') + 1);
+
+		mockMvc.perform(get("/api/v1/parcels/{id}", id))
+				.andExpect(status().isServiceUnavailable())
+				.andExpect(jsonPath("$.error").value(
+						org.hamcrest.Matchers.containsString("servicio de telemetría")));
+	}
+
+	@Test
+	void rejectsAssigningOneSensorToMoreThanOneParcel() throws Exception {
+		String body = """
+				{
+				  "name": "Huerto duplicado",
+				  "location": {
+				    "latitude": 28,
+				    "longitude": -106
+				  },
+				  "soilType": "LIMOSO",
+				  "ownerOrLead": "Comunidad",
+				  "sensorId": "sensor-08"
+				}
+				""";
+		mockMvc.perform(post("/api/v1/parcels")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(body))
+				.andExpect(status().isCreated());
+		mockMvc.perform(post("/api/v1/parcels")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(body))
+				.andExpect(status().isConflict())
+				.andExpect(jsonPath("$.error").value(
+						org.hamcrest.Matchers.containsString("ya está asignado")));
 	}
 }

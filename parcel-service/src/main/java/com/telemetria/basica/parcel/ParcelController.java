@@ -40,8 +40,8 @@ public class ParcelController {
 	}
 
 	@GetMapping("/{id}")
-	public ParcelResponse findById(@PathVariable @Positive(message = "El ID debe ser positivo") Long id) {
-		return service.findById(id);
+	public ParcelDetailsResponse findById(@PathVariable @Positive(message = "El ID debe ser positivo") Long id) {
+		return service.findDetailsById(id);
 	}
 
 	@PutMapping("/{id}")

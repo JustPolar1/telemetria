@@ -39,6 +39,9 @@ public class Parcel {
 	@Column(name = "owner_or_lead", nullable = false, length = 150)
 	private String ownerOrLead;
 
+	@Column(name = "sensor_id", unique = true, length = 100)
+	private String sensorId;
+
 	@Generated(event = EventType.INSERT)
 	@ColumnDefault("CURRENT_TIMESTAMP")
 	@Column(name = "created_at", nullable = false, insertable = false, updatable = false)
@@ -52,12 +55,14 @@ public class Parcel {
 			BigDecimal latitude,
 			BigDecimal longitude,
 			SoilType soilType,
-			String ownerOrLead) {
+			String ownerOrLead,
+			String sensorId) {
 		this.name = name;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.soilType = soilType;
 		this.ownerOrLead = ownerOrLead;
+		this.sensorId = sensorId;
 	}
 
 	public void update(
@@ -65,12 +70,14 @@ public class Parcel {
 			BigDecimal latitude,
 			BigDecimal longitude,
 			SoilType soilType,
-			String ownerOrLead) {
+			String ownerOrLead,
+			String sensorId) {
 		this.name = name;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.soilType = soilType;
 		this.ownerOrLead = ownerOrLead;
+		this.sensorId = sensorId;
 	}
 
 	public Long getId() {
@@ -95,6 +102,10 @@ public class Parcel {
 
 	public String getOwnerOrLead() {
 		return ownerOrLead;
+	}
+
+	public String getSensorId() {
+		return sensorId;
 	}
 
 	public Instant getCreatedAt() {

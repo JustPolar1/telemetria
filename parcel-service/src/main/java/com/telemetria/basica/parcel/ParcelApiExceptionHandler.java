@@ -20,6 +20,19 @@ public class ParcelApiExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", exception.getMessage()));
 	}
 
+	@ExceptionHandler(DuplicateSensorAssignmentException.class)
+	public ResponseEntity<Map<String, String>> handleDuplicateSensor(
+			DuplicateSensorAssignmentException exception) {
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("error", exception.getMessage()));
+	}
+
+	@ExceptionHandler(TelemetryServiceUnavailableException.class)
+	public ResponseEntity<Map<String, String>> handleTelemetryUnavailable(
+			TelemetryServiceUnavailableException exception) {
+		return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+				.body(Map.of("error", exception.getMessage()));
+	}
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Map<String, String>> handleInvalidRequest(MethodArgumentNotValidException exception) {
 		String errors = exception.getBindingResult().getFieldErrors().stream()

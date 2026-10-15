@@ -10,6 +10,7 @@ services:
     volumes:
       - parcel-db-data:/var/lib/postgresql/data
       - ./databases/init/02-parcels.sql:/docker-entrypoint-initdb.d/01-parcels.sql:ro
+      - ./databases/init/04-parcel-sensor.sql:/docker-entrypoint-initdb.d/02-parcel-sensor.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U telemetria -d parcels"]
       interval: 5s
@@ -41,11 +42,14 @@ services:
       DB_URL: jdbc:postgresql://parcel-db:5432/parcels
       DB_USERNAME: telemetria
       DB_PASSWORD: ${PARCEL_DB_PASSWORD:-parcel_dev_only}
+      TELEMETRY_SERVICE_URL: http://telemetry-api:8080
     ports:
       - "8081:8080"
     depends_on:
       parcel-db:
         condition: service_healthy
+      telemetry-api:
+        condition: service_started
 
   telemetry-api:
     build:

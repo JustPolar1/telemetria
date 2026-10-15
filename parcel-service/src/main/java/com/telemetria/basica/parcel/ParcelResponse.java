@@ -8,6 +8,7 @@ public record ParcelResponse(
 		ParcelLocationResponse location,
 		SoilType soilType,
 		String ownerOrLead,
+		String sensorId,
 		Instant createdAt) {
 
 	public static ParcelResponse from(Parcel parcel) {
@@ -17,6 +18,7 @@ public record ParcelResponse(
 				new ParcelLocationResponse(parcel.getLatitude(), parcel.getLongitude()),
 				parcel.getSoilType(),
 				parcel.getOwnerOrLead(),
+				parcel.getSensorId(),
 				parcel.getCreatedAt());
 	}
 }

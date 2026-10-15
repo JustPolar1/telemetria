@@ -41,10 +41,10 @@ Los esquemas de `databases/init` se ejecutan automáticamente solo cuando se cre
 psql -h localhost -p 5434 -U telemetria -d telemetria -f databases/init/03-measurement-types.sql
 ```
 
-Si el volumen de parcelas ya existía, crea la tabla nueva con:
+Si el volumen de parcelas ya existía, añade la asociación con sensores:
 
 ```powershell
-psql -h localhost -p 5433 -U telemetria -d parcels -f databases/init/02-parcels.sql
+psql -h localhost -p 5433 -U telemetria -d parcels -f databases/init/04-parcel-sensor.sql
 ```
 
 No borres volúmenes para aplicar cambios si contienen datos que debas conservar.
@@ -57,7 +57,7 @@ No borres volúmenes para aplicar cambios si contienen datos que debas conservar
 |---|---|---|
 | `POST` | `/api/v1/parcels` | Crea una parcela (`201 Created`) |
 | `GET` | `/api/v1/parcels` | Lista parcelas |
-| `GET` | `/api/v1/parcels/{id}` | Consulta una parcela |
+| `GET` | `/api/v1/parcels/{id}` | Consulta una parcela y las últimas mediciones de su sensor |
 | `PUT` | `/api/v1/parcels/{id}` | Reemplaza los datos de una parcela |
 | `DELETE` | `/api/v1/parcels/{id}` | Elimina una parcela (`204 No Content`) |
 
@@ -71,13 +71,16 @@ Ejemplo de cuerpo para crear o actualizar:
     "longitude": -106.0889
   },
   "soilType": "LIMOSO",
-  "ownerOrLead": "Comunidad vecinal"
+  "ownerOrLead": "Comunidad vecinal",
+  "sensorId": "sensor-01"
 }
 ```
 
 Valores aceptados para `soilType`: `ARCILLOSO`, `LIMOSO` y `ARENOSO`. Las coordenadas deben respetar los límites GPS (latitud −90 a 90 y longitud −180 a 180) y admitir hasta seis decimales. Los campos de texto obligatorios se recortan en los extremos y se rechazan si contienen marcas HTML (`<`, `>`), caracteres de control o están vacíos.
 
-Si el ID no existe, la API devuelve `404` con un mensaje personalizado. Las solicitudes inválidas responden `400` con los campos que requieren corrección. El esquema está en [02-parcels.sql](./databases/init/02-parcels.sql).
+Cada parcela tiene un `sensorId` único para consultar el estado actual. Al crear una parcela nueva, incluye ese campo; al editar parcelas antiguas sin sensor, asígnales uno con `PUT`. Si el ID no existe, la API devuelve `404`; un sensor ya asignado produce `409`; las solicitudes inválidas responden `400` con los campos que requieren corrección. El esquema está en [02-parcels.sql](./databases/init/02-parcels.sql); [04-parcel-sensor.sql](./databases/init/04-parcel-sensor.sql) agrega la columna a instalaciones anteriores.
+
+El detalle `GET /api/v1/parcels/{id}` consulta el último dato de cada métrica de ese sensor en Telemetry Service. `telemetryStatus` será `AVAILABLE` si tiene mediciones, `NO_DATA` si no las tiene y `UNASSIGNED` en registros antiguos sin sensor. Si Telemetry Service no responde, Parcel Service devuelve `503` en vez de un estado incompleto. Estos valores describen disponibilidad de datos y no son diagnósticos agronómicos.
 
 ## Telemetry Service
 
@@ -87,6 +90,7 @@ Si el ID no existe, la API devuelve `404` con un mensaje personalizado. Las soli
 |---|---|---|
 | `POST` | `/api/lecturas` | Recibe y guarda una lectura (`201 Created`) |
 | `GET` | `/api/sensores/{sensorId}/lecturas` | Consulta lecturas con filtros y paginación |
+| `GET` | `/api/v1/sensors/{sensorId}/readings/latest` | Devuelve la lectura más reciente por métrica del sensor |
 
 Ejemplo de lectura:
 
@@ -128,7 +132,7 @@ mvn -f basica/pom.xml test
 
 ## Alcance del caso
 
-La implementación cubre los dos microservicios base, el CRUD de Parcel, la recepción y consulta de telemetría, validación de entradas, sanitización básica de texto, errores personalizados y orquestación con Docker Compose. El detalle de una parcela devuelve sus datos registrados; todavía no agrega el estado de las lecturas, pues falta definir y conectar la asociación sensor-parcela entre servicios. Alertas en tiempo real, recomendaciones agronómicas y gestión de voluntarios se describen en el caso, pero no incluyen contratos ni reglas de negocio concretas en el enunciado; requieren una especificación adicional antes de implementarse.
+La implementación cubre los dos microservicios base, el CRUD de Parcel, la recepción y consulta de telemetría, validación de entradas, sanitización básica de texto, errores personalizados y orquestación con Docker Compose. El detalle de la parcela consulta las últimas mediciones por tipo para el sensor asociado. Alertas en tiempo real, recomendaciones agronómicas y gestión de voluntarios se describen en el caso, pero no incluyen contratos ni reglas de negocio concretas en el enunciado; requieren una especificación adicional antes de implementarse.
 
 ### Evidencias del desarrollo de telemetría
 

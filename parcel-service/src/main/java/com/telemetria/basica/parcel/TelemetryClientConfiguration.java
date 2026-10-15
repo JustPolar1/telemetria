@@ -1,0 +1,27 @@
+package com.telemetria.basica.parcel;
+
+import java.time.Duration;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.RestClient;
+
+@Configuration
+public class TelemetryClientConfiguration {
+
+	@Bean
+	RestClient telemetryRestClient(
+			@Value("${telemetry.service.url:http://localhost:8082}") String baseUrl,
+			@Value("${telemetry.service.connect-timeout:2s}") Duration connectTimeout,
+			@Value("${telemetry.service.read-timeout:3s}") Duration readTimeout) {
+		SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+		requestFactory.setConnectTimeout(connectTimeout);
+		requestFactory.setReadTimeout(readTimeout);
+		return RestClient.builder()
+				.baseUrl(baseUrl)
+				.requestFactory(requestFactory)
+				.build();
+	}
+}

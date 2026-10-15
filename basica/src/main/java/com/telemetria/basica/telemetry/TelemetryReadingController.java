@@ -2,9 +2,11 @@ package com.telemetria.basica.telemetry;
 
 import java.net.URI;
 import java.time.Instant;
+import java.util.List;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import org.springframework.data.domain.Page;
@@ -44,5 +46,15 @@ public class TelemetryReadingController {
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "20") int size) {
 		return service.findBySensor(sensorId, from, to, page, size);
+	}
+
+	@GetMapping("/v1/sensors/{sensorId}/readings/latest")
+	public List<TelemetryReadingResponse> findLatestBySensor(
+			@PathVariable
+			@NotBlank
+			@Size(max = 100)
+			@Pattern(regexp = "^[A-Za-z0-9._:-]+$")
+			String sensorId) {
+		return service.findLatestBySensor(sensorId);
 	}
 }

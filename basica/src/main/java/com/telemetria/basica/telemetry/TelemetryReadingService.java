@@ -1,6 +1,10 @@
 package com.telemetria.basica.telemetry;
 
 import java.time.Instant;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +25,8 @@ public class TelemetryReadingService {
 
 	@Transactional
 	public TelemetryReadingResponse receive(TelemetryReadingRequest request) {
-		String sensorId = request.sensorId().trim();
+		validateMeasurement(request.metric(), request.value());
+		String sensorId = request.sensorId().strip();
 		Sensor sensor = sensorRepository.findById(sensorId)
 				.orElseGet(() -> sensorRepository.save(new Sensor(sensorId)));
 		TelemetryReading reading = new TelemetryReading(
@@ -30,6 +35,30 @@ public class TelemetryReadingService {
 				request.value(),
 				request.measuredAt());
 		return TelemetryReadingResponse.from(repository.save(reading));
+	}
+
+	private void validateMeasurement(SensorMetric metric, BigDecimal value) {
+		boolean valid = switch (metric) {
+			case TEMPERATURE -> value.compareTo(BigDecimal.valueOf(-100)) >= 0
+					&& value.compareTo(BigDecimal.valueOf(100)) <= 0;
+			case HUMIDITY, SOIL_MOISTURE -> value.signum() >= 0
+					&& value.compareTo(BigDecimal.valueOf(100)) <= 0;
+			case PH -> value.signum() >= 0 && value.compareTo(BigDecimal.valueOf(14)) <= 0;
+			case NITROGEN, PHOSPHORUS, POTASSIUM, AIR_QUALITY -> value.signum() >= 0;
+		};
+		if (!valid) {
+			throw new InvalidMeasurementException(metric);
+		}
+	}
+
+	@Transactional(readOnly = true)
+	public List<TelemetryReadingResponse> findLatestBySensor(String sensorId) {
+		return Arrays.stream(SensorMetric.values())
+				.map(metric -> repository
+						.findFirstBySensor_SensorIdAndMetricOrderByMeasuredAtDescIdDesc(sensorId, metric))
+				.flatMap(Optional::stream)
+				.map(TelemetryReadingResponse::from)
+				.toList();
 	}
 
 	@Transactional(readOnly = true)

@@ -106,4 +106,65 @@ class TelemetryReadingControllerTests {
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.error").exists());
 	}
+
+	@Test
+	void rejectsHumidityOutsideItsValidRange() throws Exception {
+		mockMvc.perform(post("/api/lecturas")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{
+						  "sensorId": "sensor-01",
+						  "metric": "HUMIDITY",
+						  "value": 120,
+						  "measuredAt": "2026-10-02T18:30:00Z"
+						}
+						"""))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.error").value(
+						org.hamcrest.Matchers.containsString("HUMIDITY")));
+	}
+
+	@Test
+	void returnsLatestReadingForEachMetricOfASensor() throws Exception {
+		mockMvc.perform(post("/api/lecturas")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{
+						  "sensorId": "sensor-latest",
+						  "metric": "PH",
+						  "value": 6.5,
+						  "measuredAt": "2026-10-02T18:30:00Z"
+						}
+						"""))
+				.andExpect(status().isCreated());
+		mockMvc.perform(post("/api/lecturas")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{
+						  "sensorId": "sensor-latest",
+						  "metric": "PH",
+						  "value": 6.8,
+						  "measuredAt": "2026-10-03T18:30:00Z"
+						}
+						"""))
+				.andExpect(status().isCreated());
+		mockMvc.perform(post("/api/lecturas")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{
+						  "sensorId": "sensor-latest",
+						  "metric": "SOIL_MOISTURE",
+						  "value": 47.25,
+						  "measuredAt": "2026-10-03T18:29:00Z"
+						}
+						"""))
+				.andExpect(status().isCreated());
+
+		mockMvc.perform(get("/api/v1/sensors/sensor-latest/readings/latest"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.length()").value(2))
+				.andExpect(jsonPath("$[0].metric").value("SOIL_MOISTURE"))
+				.andExpect(jsonPath("$[1].metric").value("PH"))
+				.andExpect(jsonPath("$[1].value").value(6.8));
+	}
 }

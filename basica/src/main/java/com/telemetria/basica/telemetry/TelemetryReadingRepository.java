@@ -5,6 +5,7 @@ import java.time.Instant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
 
 public interface TelemetryReadingRepository extends JpaRepository<TelemetryReading, Long> {
 
@@ -18,4 +19,7 @@ public interface TelemetryReadingRepository extends JpaRepository<TelemetryReadi
 			String sensorId, Instant to, Pageable pageable);
 
 	Page<TelemetryReading> findBySensor_SensorId(String sensorId, Pageable pageable);
+
+	Optional<TelemetryReading> findFirstBySensor_SensorIdAndMetricOrderByMeasuredAtDescIdDesc(
+			String sensorId, SensorMetric metric);
 }

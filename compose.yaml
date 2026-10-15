@@ -1,0 +1,69 @@
+services:
+  parcel-db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: parcels
+      POSTGRES_USER: telemetria
+      POSTGRES_PASSWORD: ${PARCEL_DB_PASSWORD:-parcel_dev_only}
+    ports:
+      - "5433:5432"
+    volumes:
+      - parcel-db-data:/var/lib/postgresql/data
+      - ./databases/init/02-parcels.sql:/docker-entrypoint-initdb.d/01-parcels.sql:ro
+      - ./databases/init/04-parcel-sensor.sql:/docker-entrypoint-initdb.d/02-parcel-sensor.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U telemetria -d parcels"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  telemetry-db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: telemetria
+      POSTGRES_USER: telemetria
+      POSTGRES_PASSWORD: ${TELEMETRY_DB_PASSWORD:-telemetry_dev_only}
+    ports:
+      - "5434:5432"
+    volumes:
+      - telemetry-db-data:/var/lib/postgresql/data
+      - ./databases/init/01-sensors.sql:/docker-entrypoint-initdb.d/01-sensors.sql:ro
+      - ./databases/init/03-measurement-types.sql:/docker-entrypoint-initdb.d/02-measurement-types.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U telemetria -d telemetria"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  parcel-api:
+    build:
+      context: ./parcel-service
+    environment:
+      DB_URL: jdbc:postgresql://parcel-db:5432/parcels
+      DB_USERNAME: telemetria
+      DB_PASSWORD: ${PARCEL_DB_PASSWORD:-parcel_dev_only}
+      TELEMETRY_SERVICE_URL: http://telemetry-api:8080
+    ports:
+      - "8081:8080"
+    depends_on:
+      parcel-db:
+        condition: service_healthy
+      telemetry-api:
+        condition: service_started
+
+  telemetry-api:
+    build:
+      context: ./basica
+    environment:
+      DB_URL: jdbc:postgresql://telemetry-db:5432/telemetria
+      DB_USERNAME: telemetria
+      DB_PASSWORD: ${TELEMETRY_DB_PASSWORD:-telemetry_dev_only}
+    ports:
+      - "8082:8080"
+    depends_on:
+      telemetry-db:
+        condition: service_healthy
+
+volumes:
+  parcel-db-data:
+  telemetry-db-data:

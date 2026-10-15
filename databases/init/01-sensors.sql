@@ -8,7 +8,10 @@ CREATE TABLE IF NOT EXISTS sensor_readings (
     sensor_id VARCHAR(100) NOT NULL
         REFERENCES sensors (sensor_id) ON DELETE CASCADE,
     measurement_type VARCHAR(20) NOT NULL
-        CHECK (measurement_type IN ('temperature', 'humidity')),
+        CHECK (measurement_type IN (
+            'temperature', 'humidity', 'soil_moisture', 'ph',
+            'nitrogen', 'phosphorus', 'potassium', 'air_quality'
+        )),
     measured_value NUMERIC(12, 4) NOT NULL,
     measured_at TIMESTAMPTZ NOT NULL,
     recorded_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP

@@ -8,12 +8,16 @@ import jakarta.validation.constraints.Positive;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/parcels")
 public class ParcelController {
@@ -38,5 +42,19 @@ public class ParcelController {
 	@GetMapping("/{id}")
 	public ParcelResponse findById(@PathVariable @Positive(message = "El ID debe ser positivo") Long id) {
 		return service.findById(id);
+	}
+
+	@PutMapping("/{id}")
+	public ParcelResponse update(
+			@PathVariable @Positive(message = "El ID debe ser positivo") Long id,
+			@Valid @RequestBody ParcelRequest request) {
+		return service.update(id, request);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(
+			@PathVariable @Positive(message = "El ID debe ser positivo") Long id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
 	}
 }

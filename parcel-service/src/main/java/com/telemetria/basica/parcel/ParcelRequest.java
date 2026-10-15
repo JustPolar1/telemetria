@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 public record ParcelRequest(
 		@NotBlank(message = "El nombre de la parcela es obligatorio")
 		@Size(max = 120, message = "El nombre no puede exceder 120 caracteres")
-		@Pattern(regexp = "^[^\\p{Cc}]*$", message = "El nombre contiene caracteres de control no permitidos")
+		@Pattern(regexp = "^[^\\p{Cc}<>]*$", message = "El nombre contiene caracteres o marcas no permitidos")
 		String name,
 		@NotNull(message = "La ubicación es obligatoria")
 		@Valid
@@ -18,6 +18,6 @@ public record ParcelRequest(
 		SoilType soilType,
 		@NotBlank(message = "El responsable es obligatorio")
 		@Size(max = 150, message = "El responsable no puede exceder 150 caracteres")
-		@Pattern(regexp = "^[^\\p{Cc}]*$", message = "El responsable contiene caracteres de control no permitidos")
+		@Pattern(regexp = "^[^\\p{Cc}<>]*$", message = "El responsable contiene caracteres o marcas no permitidos")
 		String ownerOrLead) {
 }

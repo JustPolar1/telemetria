@@ -60,6 +60,19 @@ public class Parcel {
 		this.ownerOrLead = ownerOrLead;
 	}
 
+	public void update(
+			String name,
+			BigDecimal latitude,
+			BigDecimal longitude,
+			SoilType soilType,
+			String ownerOrLead) {
+		this.name = name;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.soilType = soilType;
+		this.ownerOrLead = ownerOrLead;
+	}
+
 	public Long getId() {
 		return id;
 	}

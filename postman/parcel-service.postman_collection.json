@@ -1,0 +1,154 @@
+{
+  "info": {
+    "_postman_id": "6698e155-0298-4bac-b6b9-b90aadad723e",
+    "name": "Parcel Service",
+    "description": "CRUD de parcelas. Inicia Docker Compose antes de enviar las solicitudes.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "parcelId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Crear parcela",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Huerto comunitario norte\",\n  \"location\": {\n    \"latitude\": 28.6353,\n    \"longitude\": -106.0889\n  },\n  \"soilType\": \"LIMOSO\",\n  \"ownerOrLead\": \"Comunidad vecinal\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/parcels",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "parcels"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Parcela creada', function () {",
+              "    pm.response.to.have.status(201);",
+              "    const parcel = pm.response.json();",
+              "    pm.expect(parcel.createdAt).to.exist;",
+              "    pm.collectionVariables.set('parcelId', parcel.id);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Listar parcelas",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/parcels",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "parcels"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Obtener parcela por ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/parcels/{{parcelId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "parcels",
+            "{{parcelId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Actualizar parcela",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Huerto comunitario actualizado\",\n  \"location\": {\n    \"latitude\": 28.6353,\n    \"longitude\": -106.0889\n  },\n  \"soilType\": \"ARCILLOSO\",\n  \"ownerOrLead\": \"Equipo de voluntarios\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/parcels/{{parcelId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "parcels",
+            "{{parcelId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Eliminar parcela",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/parcels/{{parcelId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "parcels",
+            "{{parcelId}}"
+          ]
+        }
+      }
+    }
+  ]
+}

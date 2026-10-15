@@ -106,4 +106,21 @@ class TelemetryReadingControllerTests {
 				.andExpect(status().isBadRequest())
 				.andExpect(jsonPath("$.error").exists());
 	}
+
+	@Test
+	void rejectsHumidityOutsideItsValidRange() throws Exception {
+		mockMvc.perform(post("/api/lecturas")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("""
+						{
+						  "sensorId": "sensor-01",
+						  "metric": "HUMIDITY",
+						  "value": 120,
+						  "measuredAt": "2026-10-02T18:30:00Z"
+						}
+						"""))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.error").value(
+						org.hamcrest.Matchers.containsString("HUMIDITY")));
+	}
 }

@@ -43,6 +43,8 @@ services:
       DB_USERNAME: telemetria
       DB_PASSWORD: ${PARCEL_DB_PASSWORD:-parcel_dev_only}
       TELEMETRY_SERVICE_URL: http://telemetry-api:8080
+      TELEMETRY_AUTH_USERNAME: ${TELEMETRY_AUTH_USERNAME:?Set TELEMETRY_AUTH_USERNAME in the environment}
+      TELEMETRY_AUTH_PASSWORD: ${TELEMETRY_AUTH_PASSWORD:?Set TELEMETRY_AUTH_PASSWORD in the environment}
       JWT_SECRET_BASE64: ${JWT_SECRET_BASE64:?Set JWT_SECRET_BASE64 in the environment}
       JWT_ISSUER: ${JWT_ISSUER:-telemetry-service}
     ports:

@@ -12,7 +12,7 @@ Cada microservicio tiene su propia base de datos PostgreSQL. Docker Compose orqu
 El alcance de autenticación incluye **Telemetry Service** y **Parcel Service**. Las siguientes reglas describen el diseño acordado para la implementación; todavía no significan que la autenticación o HTTPS estén habilitados.
 
 - **Emisión y validación de tokens:** Telemetry Service será el emisor local de JWT. Ambos servicios validarán los tokens con la misma clave configurada fuera del repositorio. No se almacenarán claves privadas, secretos ni contraseñas en Git.
-- **Autenticación entre servicios:** Parcel Service obtendrá un token de servicio de Telemetry usando credenciales configuradas externamente y lo enviará como Bearer Token al llamar a sus endpoints. No se dejarán endpoints de negocio públicos para mantener esta integración.
+- **Autenticación entre servicios:** Parcel Service obtendrá un token de servicio de Telemetry usando credenciales configuradas externamente, lo reutilizará hasta acercarse a su expiración y lo enviará como Bearer Token al llamar a sus endpoints. No se dejarán endpoints de negocio públicos para mantener esta integración.
 - **Rutas públicas:** `POST /api/auth/**` para autenticación/emisión de tokens y `GET /health` para health checks.
 - **Rutas protegidas:** todos los demás endpoints de negocio, incluidos `POST /api/lecturas`, `GET /api/sensores/{sensorId}/lecturas`, `GET /api/v1/sensors/{sensorId}/readings/latest` y las rutas `GET`, `POST`, `PUT` y `DELETE /api/v1/parcels/**`.
 - **Autorización inicial:** se requiere un JWT válido para las rutas protegidas. Las solicitudes sin credenciales o con token inválido responderán `401`; la autorización por roles responderá `403` cuando se definan permisos de negocio específicos.
@@ -25,8 +25,9 @@ Antes de iniciar las aplicaciones, configura externamente:
 - `JWT_SECRET_BASE64`: clave aleatoria codificada en Base64 con al menos 32 bytes. No reutilices la clave de pruebas.
 - `JWT_ISSUER`: emisor esperado por ambos servicios; por defecto, `telemetry-service`.
 - `AUTH_USERNAME` y `AUTH_PASSWORD_HASH`: usuario y hash BCrypt de Telemetry Service. El servicio mantiene la credencial en memoria y compara contraseñas mediante BCrypt.
+- `TELEMETRY_AUTH_USERNAME` y `TELEMETRY_AUTH_PASSWORD`: las mismas credenciales en texto claro, suministradas solo a Parcel Service para solicitar y renovar el token interno. `TELEMETRY_AUTH_PASSWORD` debe corresponder al hash BCrypt configurado en `AUTH_PASSWORD_HASH`.
 
-Puedes guardar estos valores en un `.env` local ignorado por Git; Docker Compose exige que los tres secretos estén configurados y los comparte entre los servicios que corresponden.
+Puedes guardar estos valores en un `.env` local ignorado por Git; Docker Compose exige que los secretos estén configurados y los entrega solo a los servicios que los necesitan. Protege el archivo `.env` y no lo añadas al repositorio.
 
 Por ejemplo, en PowerShell genera una clave de desarrollo segura con:
 

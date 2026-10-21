@@ -11,15 +11,18 @@ import org.springframework.web.client.RestClientException;
 public class TelemetryClient {
 
 	private final RestClient restClient;
+	private final TelemetryTokenProvider tokenProvider;
 
-	public TelemetryClient(RestClient telemetryRestClient) {
+	public TelemetryClient(RestClient telemetryRestClient, TelemetryTokenProvider tokenProvider) {
 		this.restClient = telemetryRestClient;
+		this.tokenProvider = tokenProvider;
 	}
 
 	public List<TelemetryReadingSnapshot> findLatestReadings(String sensorId) {
 		try {
 			List<TelemetryReadingSnapshot> readings = restClient.get()
 					.uri("/api/v1/sensors/{sensorId}/readings/latest", sensorId)
+					.headers(headers -> headers.setBearerAuth(tokenProvider.getAccessToken()))
 					.retrieve()
 					.body(new ParameterizedTypeReference<>() {
 					});

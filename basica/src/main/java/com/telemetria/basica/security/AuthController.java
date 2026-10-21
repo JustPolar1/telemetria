@@ -2,7 +2,9 @@ package com.telemetria.basica.security;
 
 import jakarta.validation.Valid;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,10 @@ public class AuthController {
 
 	@PostMapping("/token")
 	public ResponseEntity<AuthResponse> issueToken(@Valid @RequestBody AuthRequest request) {
-		return ResponseEntity.ok(tokenService.issueToken(request));
+		try {
+			return ResponseEntity.ok(tokenService.issueToken(request));
+		} catch (AuthenticationException exception) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		}
 	}
 }

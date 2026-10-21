@@ -24,6 +24,7 @@ Antes de iniciar las aplicaciones, configura externamente:
 
 - `JWT_SECRET_BASE64`: clave aleatoria codificada en Base64 con al menos 32 bytes. No reutilices la clave de pruebas.
 - `JWT_ISSUER`: emisor esperado por ambos servicios; por defecto, `telemetry-service`.
+- `CORS_ALLOWED_ORIGINS`: lista separada por comas de orígenes del frontend permitidos; por defecto, `http://localhost:4200`. No uses `*`.
 - `AUTH_USERNAME` y `AUTH_PASSWORD_HASH`: usuario y hash BCrypt de Telemetry Service. El servicio mantiene la credencial en memoria y compara contraseñas mediante BCrypt.
 - `TELEMETRY_AUTH_USERNAME` y `TELEMETRY_AUTH_PASSWORD`: las mismas credenciales en texto claro, suministradas solo a Parcel Service para solicitar y renovar el token interno. `TELEMETRY_AUTH_PASSWORD` debe corresponder al hash BCrypt configurado en `AUTH_PASSWORD_HASH`.
 

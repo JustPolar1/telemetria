@@ -1,7 +1,9 @@
 package com.telemetria.basica.parcel.security;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 
 import java.time.Instant;
 
@@ -50,6 +52,26 @@ class ParcelSecurityTests {
 		mockMvc.perform(get("/api/v1/parcels")
 				.header("Authorization", "Bearer malformed"))
 				.andExpect(status().isUnauthorized());
+	}
+
+	@Test
+	void allowsCorsPreflightFromConfiguredOrigin() throws Exception {
+		mockMvc.perform(options("/api/v1/parcels")
+				.header("Origin", "http://localhost:4200")
+				.header("Access-Control-Request-Method", "POST")
+				.header("Access-Control-Request-Headers", "authorization,content-type"))
+				.andExpect(status().isOk())
+				.andExpect(header().string("Access-Control-Allow-Origin", "http://localhost:4200"))
+				.andExpect(header().string("Access-Control-Allow-Methods",
+						org.hamcrest.Matchers.containsString("POST")));
+	}
+
+	@Test
+	void rejectsCorsPreflightFromUnconfiguredOrigin() throws Exception {
+		mockMvc.perform(options("/api/v1/parcels")
+				.header("Origin", "https://untrusted.example")
+				.header("Access-Control-Request-Method", "POST"))
+				.andExpect(status().isForbidden());
 	}
 
 	@Test

@@ -51,7 +51,8 @@ class TelemetrySecurityTests {
 		mockMvc.perform(post("/api/lecturas")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content("{}"))
-				.andExpect(status().isUnauthorized());
+				.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("$.error").value("Autenticación requerida"));
 	}
 
 	@Test
@@ -115,6 +116,7 @@ class TelemetrySecurityTests {
 		mockMvc.perform(post("/api/auth/token")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsBytes(new AuthRequest("test-user", "wrong-password"))))
-				.andExpect(status().isUnauthorized());
+				.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("$.error").value("Credenciales inválidas"));
 	}
 }

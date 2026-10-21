@@ -2,8 +2,13 @@ package com.telemetria.basica.parcel.security;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Instant;
 
@@ -14,6 +19,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -35,6 +43,9 @@ class ParcelSecurityTests {
 	@Autowired
 	private MockMvc mockMvc;
 
+	@Autowired
+	private SecurityErrorHandlers errorHandlers;
+
 	@Test
 	void allowsHealthCheckWithoutToken() throws Exception {
 		mockMvc.perform(get("/health"))
@@ -44,7 +55,8 @@ class ParcelSecurityTests {
 	@Test
 	void rejectsProtectedEndpointWithoutToken() throws Exception {
 		mockMvc.perform(get("/api/v1/parcels"))
-				.andExpect(status().isUnauthorized());
+				.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("$.error").value("Autenticación requerida"));
 	}
 
 	@Test
@@ -90,5 +102,19 @@ class ParcelSecurityTests {
 		mockMvc.perform(get("/api/v1/parcels")
 				.header("Authorization", "Bearer " + token))
 				.andExpect(status().isOk());
+	}
+
+	@Test
+	void accessDeniedResponseDoesNotExposeExceptionDetails() throws Exception {
+		MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/v1/admin");
+		MockHttpServletResponse response = new MockHttpServletResponse();
+
+		errorHandlers.accessDeniedHandler().handle(
+				request, response, new AccessDeniedException("sensitive exception details"));
+
+		assertEquals(403, response.getStatus());
+		assertTrue(response.getContentType().startsWith("application/json"));
+		assertEquals("{\"error\":\"Permisos insuficientes\"}", response.getContentAsString());
+		assertFalse(response.getContentAsString().contains("sensitive"));
 	}
 }

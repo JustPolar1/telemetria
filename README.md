@@ -83,6 +83,8 @@ curl.exe --tlsv1.2 --tls-max 1.2 --cacert C:\certs\telemetry.crt https://localho
 
 La sonda de Docker omite la validación del certificado solo para comprobar el health endpoint de loopback. La comunicación Parcel → Telemetry valida el certificado con el truststore configurado. Para usar Postman o un navegador contra los certificados autofirmados locales, confía en `telemetry.crt` y `parcel.crt` en el cliente; no desactives la validación TLS. Las contraseñas predeterminadas de PostgreSQL son solo para desarrollo; sustitúyelas con `PARCEL_DB_PASSWORD` y `TELEMETRY_DB_PASSWORD` fuera de Git.
 
+Los rechazos de autenticación y autorización responden con JSON genérico y registran solo el método y la ruta, sin credenciales, tokens ni contenido de la solicitud. Un fallo de handshake TLS ocurre antes de que Spring reciba una solicitud HTTP, por lo que puede cerrarse la conexión sin respuesta HTTP; el detalle se registra en la capa TLS/servidor y no se expone al cliente.
+
 Para detener contenedores sin borrar datos:
 
 ```powershell

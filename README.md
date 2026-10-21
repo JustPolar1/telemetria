@@ -18,6 +18,26 @@ El alcance de autenticación incluye **Telemetry Service** y **Parcel Service**.
 - **Autorización inicial:** se requiere un JWT válido para las rutas protegidas. Las solicitudes sin credenciales o con token inválido responderán `401`; la autorización por roles responderá `403` cuando se definan permisos de negocio específicos.
 - **Transporte:** ambos servicios forman parte del alcance TLS. El keystore y sus contraseñas se suministrarán fuera del repositorio; las reglas exactas de HTTPS, TLS y tratamiento de HTTP se documentarán con la configuración de transporte.
 
+## Configurar credenciales JWT para desarrollo
+
+Antes de iniciar las aplicaciones, configura externamente:
+
+- `JWT_SECRET_BASE64`: clave aleatoria codificada en Base64 con al menos 32 bytes. No reutilices la clave de pruebas.
+- `JWT_ISSUER`: emisor esperado por ambos servicios; por defecto, `telemetry-service`.
+- `AUTH_USERNAME` y `AUTH_PASSWORD_HASH`: usuario y hash BCrypt de Telemetry Service. El servicio mantiene la credencial en memoria y compara contraseñas mediante BCrypt.
+
+Puedes guardar estos valores en un `.env` local ignorado por Git; Docker Compose exige que los tres secretos estén configurados y los comparte entre los servicios que corresponden.
+
+Por ejemplo, en PowerShell genera una clave de desarrollo segura con:
+
+```powershell
+$bytes = [byte[]]::new(32)
+[System.Security.Cryptography.RandomNumberGenerator]::Fill($bytes)
+$env:JWT_SECRET_BASE64 = [Convert]::ToBase64String($bytes)
+```
+
+Genera el hash BCrypt con `BCryptPasswordEncoder` de Spring Security y guarda los valores solo en variables de entorno o un gestor de secretos local; no los añadas al repositorio. La ruta `POST /api/auth/token` recibirá `{"username":"...","password":"..."}` y devolverá un Bearer Token con vigencia predeterminada de 15 minutos.
+
 ## Requisitos
 
 - Docker Desktop con Docker Compose.

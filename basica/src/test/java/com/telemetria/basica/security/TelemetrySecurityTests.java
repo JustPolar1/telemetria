@@ -7,11 +7,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -31,6 +37,9 @@ class TelemetrySecurityTests {
 
 	@Autowired
 	private MockMvc mockMvc;
+
+	@Autowired
+	private SecurityErrorHandlers errorHandlers;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -60,6 +69,19 @@ class TelemetrySecurityTests {
 		mockMvc.perform(get("/api/v1/sensors/sensor-01/readings/latest")
 				.header("Authorization", "Bearer not-a-jwt"))
 				.andExpect(status().isUnauthorized());
+	}
+
+	@Test
+	void accessDeniedResponseDoesNotExposeExceptionDetails() throws Exception {
+		MockHttpServletRequest request = new MockHttpServletRequest("GET", "/api/admin");
+		MockHttpServletResponse response = new MockHttpServletResponse();
+
+		errorHandlers.accessDeniedHandler().handle(
+				request, response, new AccessDeniedException("sensitive exception details"));
+
+		assertEquals(403, response.getStatus());
+		assertEquals("{\"error\":\"Permisos insuficientes\"}", response.getContentAsString());
+		assertFalse(response.getContentAsString().contains("sensitive"));
 	}
 
 	@Test

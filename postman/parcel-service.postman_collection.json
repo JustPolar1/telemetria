@@ -8,7 +8,7 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:8081"
+      "value": "https://localhost:8081"
     },
     {
       "key": "parcelId",

@@ -12,11 +12,34 @@ Cada microservicio tiene su propia base de datos PostgreSQL. Docker Compose orqu
 El alcance de autenticación incluye **Telemetry Service** y **Parcel Service**. Las siguientes reglas describen el diseño acordado para la implementación; todavía no significan que la autenticación o HTTPS estén habilitados.
 
 - **Emisión y validación de tokens:** Telemetry Service será el emisor local de JWT. Ambos servicios validarán los tokens con la misma clave configurada fuera del repositorio. No se almacenarán claves privadas, secretos ni contraseñas en Git.
-- **Autenticación entre servicios:** Parcel Service obtendrá un token de servicio de Telemetry usando credenciales configuradas externamente y lo enviará como Bearer Token al llamar a sus endpoints. No se dejarán endpoints de negocio públicos para mantener esta integración.
+- **Autenticación entre servicios:** Parcel Service obtendrá un token de servicio de Telemetry usando credenciales configuradas externamente, lo reutilizará hasta acercarse a su expiración y lo enviará como Bearer Token al llamar a sus endpoints. No se dejarán endpoints de negocio públicos para mantener esta integración.
 - **Rutas públicas:** `POST /api/auth/**` para autenticación/emisión de tokens y `GET /health` para health checks.
 - **Rutas protegidas:** todos los demás endpoints de negocio, incluidos `POST /api/lecturas`, `GET /api/sensores/{sensorId}/lecturas`, `GET /api/v1/sensors/{sensorId}/readings/latest` y las rutas `GET`, `POST`, `PUT` y `DELETE /api/v1/parcels/**`.
 - **Autorización inicial:** se requiere un JWT válido para las rutas protegidas. Las solicitudes sin credenciales o con token inválido responderán `401`; la autorización por roles responderá `403` cuando se definan permisos de negocio específicos.
 - **Transporte:** ambos servicios forman parte del alcance TLS. El keystore y sus contraseñas se suministrarán fuera del repositorio; las reglas exactas de HTTPS, TLS y tratamiento de HTTP se documentarán con la configuración de transporte.
+
+## Configurar credenciales JWT para desarrollo
+
+Antes de iniciar las aplicaciones, configura externamente:
+
+- `JWT_SECRET_BASE64`: clave aleatoria codificada en Base64 con al menos 32 bytes. No reutilices la clave de pruebas.
+- `JWT_ISSUER`: emisor esperado por ambos servicios; por defecto, `telemetry-service`.
+- `CORS_ALLOWED_ORIGINS`: lista separada por comas de orígenes del frontend permitidos; por defecto, `http://localhost:4200`. No uses `*`.
+- `AUTH_USERNAME` y `AUTH_PASSWORD_HASH`: usuario y hash BCrypt de Telemetry Service. El servicio mantiene la credencial en memoria y compara contraseñas mediante BCrypt.
+- `TELEMETRY_AUTH_USERNAME` y `TELEMETRY_AUTH_PASSWORD`: las mismas credenciales en texto claro, suministradas solo a Parcel Service para solicitar y renovar el token interno. `TELEMETRY_AUTH_PASSWORD` debe corresponder al hash BCrypt configurado en `AUTH_PASSWORD_HASH`.
+- `PARCEL_TLS_KEYSTORE_FILE`, `PARCEL_TLS_KEYSTORE_PASSWORD`, `TELEMETRY_TLS_KEYSTORE_FILE`, `TELEMETRY_TLS_KEYSTORE_PASSWORD`, `TELEMETRY_TLS_TRUSTSTORE_FILE` y `TELEMETRY_TLS_TRUSTSTORE_PASSWORD`: archivos PKCS12 externos al repositorio y sus contraseñas.
+
+Puedes guardar estos valores en un `.env` local ignorado por Git; Docker Compose exige que los secretos estén configurados y los entrega solo a los servicios que los necesitan. Protege el archivo `.env` y no lo añadas al repositorio.
+
+Por ejemplo, en PowerShell genera una clave de desarrollo segura con:
+
+```powershell
+$bytes = [byte[]]::new(32)
+[System.Security.Cryptography.RandomNumberGenerator]::Fill($bytes)
+$env:JWT_SECRET_BASE64 = [Convert]::ToBase64String($bytes)
+```
+
+Genera el hash BCrypt con `BCryptPasswordEncoder` de Spring Security y guarda los valores solo en variables de entorno o un gestor de secretos local; no los añadas al repositorio. La ruta `POST /api/auth/token` recibirá `{"username":"...","password":"..."}` y devolverá un Bearer Token con vigencia predeterminada de 15 minutos.
 
 ## Requisitos
 
@@ -25,7 +48,7 @@ El alcance de autenticación incluye **Telemetry Service** y **Parcel Service**.
 
 ## Ejecutar el sistema completo
 
-Desde la raíz del repositorio, inicia los dos microservicios y sus bases:
+Configura las variables de entorno de seguridad y los keystores antes de iniciar los servicios. Desde la raíz del repositorio:
 
 ```powershell
 docker compose up --build
@@ -33,12 +56,34 @@ docker compose up --build
 
 La primera construcción puede tardar mientras Maven descarga las dependencias e imágenes. Cuando ambos servicios estén disponibles:
 
-- Parcel Service: `http://localhost:8081`
-- Telemetry Service: `http://localhost:8082`
+- Parcel Service: `https://localhost:8081`
+- Telemetry Service: `https://localhost:8082`
 - PostgreSQL de parcelas: puerto `5433`
 - PostgreSQL de telemetría: puerto `5434`
 
-Los health checks se consultan en `/health`. Las contraseñas predeterminadas del Compose son solo para desarrollo local; se pueden sustituir con las variables `PARCEL_DB_PASSWORD` y `TELEMETRY_DB_PASSWORD` en el entorno o en un archivo `.env` local. No reutilices esos valores en producción.
+Los health checks se consultan en `/health`. Los servicios aceptan TLS 1.2 y TLS 1.3 y no abren un listener HTTP, por lo que las conexiones HTTP sin cifrar se rechazan.
+
+Para desarrollo, crea los archivos PKCS12 fuera del repositorio y exporta el certificado público de Telemetry para importarlo en el truststore de Parcel:
+
+```powershell
+keytool -genkeypair -alias telemetry -keyalg RSA -keysize 3072 -storetype PKCS12 -keystore C:\certs\telemetry-keystore.p12 -validity 365 -dname "CN=telemetry-api" -ext "SAN=dns:localhost,dns:telemetry-api,ip:127.0.0.1"
+keytool -genkeypair -alias parcel -keyalg RSA -keysize 3072 -storetype PKCS12 -keystore C:\certs\parcel-keystore.p12 -validity 365 -dname "CN=parcel-api" -ext "SAN=dns:localhost,dns:parcel-api,ip:127.0.0.1"
+keytool -exportcert -rfc -alias telemetry -keystore C:\certs\telemetry-keystore.p12 -storetype PKCS12 -file C:\certs\telemetry.crt
+keytool -exportcert -rfc -alias parcel -keystore C:\certs\parcel-keystore.p12 -storetype PKCS12 -file C:\certs\parcel.crt
+keytool -importcert -noprompt -alias telemetry -file C:\certs\telemetry.crt -keystore C:\certs\telemetry-truststore.p12 -storetype PKCS12
+```
+
+Usa las contraseñas de `keytool` en las variables `*_TLS_KEYSTORE_PASSWORD` y `TELEMETRY_TLS_TRUSTSTORE_PASSWORD` correspondientes. Define las variables `*_TLS_*_FILE` con las rutas absolutas de estos archivos (usa `/` en las rutas de Windows dentro del `.env` de Compose). Configura también `AUTH_USERNAME`, `AUTH_PASSWORD_HASH`, `TELEMETRY_AUTH_USERNAME`, `TELEMETRY_AUTH_PASSWORD` y `JWT_SECRET_BASE64`. El usuario y contraseña de Telemetry deben coincidir; genera `AUTH_PASSWORD_HASH` con BCrypt a partir de `TELEMETRY_AUTH_PASSWORD`. Guarda los secretos en `.env` local, nunca en Git.
+
+Verifica la conexión HTTPS y la negociación TLS 1.2 con:
+
+```powershell
+curl.exe --tlsv1.2 --tls-max 1.2 --cacert C:\certs\telemetry.crt https://localhost:8082/health
+```
+
+La sonda de Docker omite la validación del certificado solo para comprobar el health endpoint de loopback. La comunicación Parcel → Telemetry valida el certificado con el truststore configurado. Para usar Postman o un navegador contra los certificados autofirmados locales, confía en `telemetry.crt` y `parcel.crt` en el cliente; no desactives la validación TLS. Las contraseñas predeterminadas de PostgreSQL son solo para desarrollo; sustitúyelas con `PARCEL_DB_PASSWORD` y `TELEMETRY_DB_PASSWORD` fuera de Git.
+
+Los rechazos de autenticación y autorización responden con JSON genérico y registran solo el método y la ruta, sin credenciales, tokens ni contenido de la solicitud. Un fallo de handshake TLS ocurre antes de que Spring reciba una solicitud HTTP, por lo que puede cerrarse la conexión sin respuesta HTTP; el detalle se registra en la capa TLS/servidor y no se expone al cliente.
 
 Para detener contenedores sin borrar datos:
 
@@ -119,7 +164,7 @@ Tipos aceptados: `TEMPERATURE`, `HUMIDITY`, `SOIL_MOISTURE`, `PH`, `NITROGEN`, `
 La consulta acepta `from`, `to`, `page` (desde 0) y `size` (1–100):
 
 ```text
-GET http://localhost:8082/api/sensores/sensor-01/lecturas?from=2026-10-01T00:00:00Z&to=2026-10-03T00:00:00Z&page=0&size=20
+GET https://localhost:8082/api/sensores/sensor-01/lecturas?from=2026-10-01T00:00:00Z&to=2026-10-03T00:00:00Z&page=0&size=20
 ```
 
 ## Probar con Postman
@@ -130,7 +175,8 @@ GET http://localhost:8082/api/sensores/sensor-01/lecturas?from=2026-10-01T00:00:
    - [Colección de Telemetry Service](./postman/telemetria.postman_collection.json)
 3. En la colección de parcelas ejecuta **Crear parcela** primero. El test guarda el ID devuelto en `parcelId` para las solicitudes posteriores.
 4. Ejecuta listar, consultar, actualizar y eliminar. Las operaciones de actualización y eliminación deben realizarse antes de borrar la parcela.
-5. En la colección de telemetría registra una lectura y consulta el historial del sensor.
+5. Configura el encabezado `Authorization: Bearer <token>` en las solicitudes protegidas; obtén el token desde `POST https://localhost:8082/api/auth/token` con las credenciales de desarrollo.
+6. En la colección de telemetría registra una lectura y consulta el historial del sensor.
 
 ## Ejecutar pruebas
 

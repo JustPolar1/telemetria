@@ -9,14 +9,14 @@ Cada microservicio tiene su propia base de datos PostgreSQL. Docker Compose orqu
 
 ## Decisiones de seguridad (HU-SEC-001 / SEC-01)
 
-El alcance de autenticación incluye **Telemetry Service** y **Parcel Service**. Las siguientes reglas describen el diseño acordado para la implementación; todavía no significan que la autenticación o HTTPS estén habilitados.
+La autenticación y el transporte HTTPS están habilitados en **Telemetry Service** y **Parcel Service**:
 
-- **Emisión y validación de tokens:** Telemetry Service será el emisor local de JWT. Ambos servicios validarán los tokens con la misma clave configurada fuera del repositorio. No se almacenarán claves privadas, secretos ni contraseñas en Git.
-- **Autenticación entre servicios:** Parcel Service obtendrá un token de servicio de Telemetry usando credenciales configuradas externamente, lo reutilizará hasta acercarse a su expiración y lo enviará como Bearer Token al llamar a sus endpoints. No se dejarán endpoints de negocio públicos para mantener esta integración.
-- **Rutas públicas:** `POST /api/auth/**` para autenticación/emisión de tokens y `GET /health` para health checks.
+- **Emisión y validación de tokens:** Telemetry Service emite JWT firmados con HS256. Ambos servicios validan la firma, el emisor y la expiración con la misma clave, suministrada externamente. No se guardan claves ni credenciales reales en Git.
+- **Autenticación entre servicios:** Parcel Service obtiene un token de servicio de Telemetry usando credenciales configuradas externamente, lo reutiliza hasta acercarse a su expiración y lo envía como Bearer token al llamar a sus endpoints. Los endpoints de negocio permanecen protegidos; solo se exponen las rutas públicas indicadas.
+- **Rutas públicas:** `POST /api/auth/token` para solicitar un token y `GET /health` para health checks.
 - **Rutas protegidas:** todos los demás endpoints de negocio, incluidos `POST /api/lecturas`, `GET /api/sensores/{sensorId}/lecturas`, `GET /api/v1/sensors/{sensorId}/readings/latest` y las rutas `GET`, `POST`, `PUT` y `DELETE /api/v1/parcels/**`.
-- **Autorización inicial:** se requiere un JWT válido para las rutas protegidas. Las solicitudes sin credenciales o con token inválido responderán `401`; la autorización por roles responderá `403` cuando se definan permisos de negocio específicos.
-- **Transporte:** ambos servicios forman parte del alcance TLS. El keystore y sus contraseñas se suministrarán fuera del repositorio; las reglas exactas de HTTPS, TLS y tratamiento de HTTP se documentarán con la configuración de transporte.
+- **Autenticación y autorización:** las solicitudes protegidas sin token o con un token inválido responden `401`; las solicitudes autenticadas que no tienen autorización responden `403`. Las rutas de negocio requieren un token válido.
+- **Transporte:** ambos servicios aceptan HTTPS con TLS 1.2 o TLS 1.3. Spring Boot escucha en el puerto interno `8443`; Compose publica Parcel Service en `8081` y Telemetry Service en `8082`. No se habilita un listener HTTP ni una redirección: el tráfico HTTP sin cifrar no se acepta. Los keystores y contraseñas se suministran desde archivos y variables externos al repositorio; Parcel valida el certificado de Telemetry con un truststore.
 
 ## Configurar credenciales JWT para desarrollo
 
@@ -35,7 +35,9 @@ Por ejemplo, en PowerShell genera una clave de desarrollo segura con:
 
 ```powershell
 $bytes = [byte[]]::new(32)
-[System.Security.Cryptography.RandomNumberGenerator]::Fill($bytes)
+$rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
+$rng.GetBytes($bytes)
+$rng.Dispose()
 $env:JWT_SECRET_BASE64 = [Convert]::ToBase64String($bytes)
 ```
 

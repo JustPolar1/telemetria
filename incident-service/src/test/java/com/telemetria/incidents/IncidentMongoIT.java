@@ -27,6 +27,8 @@ class IncidentMongoIT {
     @Autowired IncidentRepository repository;
 
     @Test void crudPersistsInRealMongoAndUniqueIndexRejectsDuplicates() throws Exception {
+        mvc.perform(get("/v3/api-docs")).andExpect(status().isOk())
+                .andExpect(jsonPath("$.paths['/api/v1/incidents'].post").exists());
         repository.deleteAll();
         String location = mvc.perform(post(IncidentControllerTests.BASE).contentType(MediaType.APPLICATION_JSON)
                 .content(IncidentControllerTests.BODY)).andExpect(status().isCreated())

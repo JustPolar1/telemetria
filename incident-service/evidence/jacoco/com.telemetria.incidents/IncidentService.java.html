@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>IncidentService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">incident-service</a> &gt; <a href="index.source.html" class="el_package">com.telemetria.incidents</a> &gt; <span class="el_source">IncidentService.java</span></div><h1>IncidentService.java</h1><pre class="source lang-java linenums">package com.telemetria.incidents;
+
+import java.time.Instant;
+import java.util.UUID;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+@Service
+public class IncidentService {
+    private final IncidentRepository repository;
+
+<span class="fc" id="L15">    public IncidentService(IncidentRepository repository) { this.repository = repository; }</span>
+
+    public Incident create(IncidentRequest request) {
+<span class="fc" id="L18">        return save(new Incident(null, UUID.randomUUID().toString(), request.sensorId(),</span>
+<span class="fc" id="L19">                request.titulo().strip(), request.descripcion().strip(), request.estado(), Instant.now()));</span>
+    }
+
+    public Page&lt;Incident&gt; list(int page, int size) {
+<span class="fc" id="L23">        return repository.findAll(PageRequest.of(page, size, Sort.by(&quot;fechaCreacion&quot;).descending()));</span>
+    }
+
+    public Incident find(String id) {
+<span class="fc" id="L27">        return repository.findById(id).orElseThrow(() -&gt; new IncidentNotFoundException(id));</span>
+    }
+
+    public Incident update(String id, IncidentRequest request) {
+<span class="fc" id="L31">        Incident current = find(id);</span>
+<span class="fc" id="L32">        return save(new Incident(current.id(), current.folio(), request.sensorId(),</span>
+<span class="fc" id="L33">                request.titulo().strip(), request.descripcion().strip(), request.estado(), current.fechaCreacion()));</span>
+    }
+
+<span class="fc" id="L36">    public void delete(String id) { repository.delete(find(id)); }</span>
+
+    private Incident save(Incident incident) {
+<span class="fc" id="L39">        try { return repository.save(incident); }</span>
+<span class="fc" id="L40">        catch (DuplicateKeyException exception) { throw new DuplicateIncidentException(); }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

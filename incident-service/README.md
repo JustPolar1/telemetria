@@ -19,9 +19,11 @@ docker compose -f incident-service/compose.yaml up -d incident-db
 mvn -f incident-service/pom.xml spring-boot:run
 ```
 
-Variables opcionales: `MONGODB_URI` y `SERVER_PORT` (8083). Los datos se conservan en un volumen. Detener sin borrar datos:
+Variables opcionales: `MONGODB_URI` y `SERVER_PORT` (8083). Los datos se conservan en un volumen.
 
 Swagger UI está disponible en `http://localhost:8083/swagger-ui/index.html` y el contrato OpenAPI en `/v3/api-docs`. Para cambiar el puerto publicado de MongoDB, define `INCIDENT_MONGO_PORT` en Compose; si ejecutas Java fuera de Docker, ajusta también `MONGODB_URI`.
+
+Detener sin borrar datos:
 
 ```powershell
 docker compose -f incident-service/compose.yaml down
@@ -80,6 +82,25 @@ mvn -f incident-service/pom.xml clean verify sonar:sonar "-Dsonar.qualitygate.wa
 
 El scanner importa el XML de JaCoCo. La aprobación depende del Quality Gate configurado en el servidor; no queda acreditada solo por tener el plugin.
 
-## Evidencias pendientes para la entrega
+Para reproducir las condiciones en otro servidor, crea el Quality Gate **HU-01 Incidencias**, conserva sus condiciones estándar y añade las condiciones globales siguientes. Asígnalo al proyecto `telemetria-incidents` antes de analizar:
 
-Guardar capturas de POST, GET, PUT, DELETE y errores; ejecución satisfactoria de `verify`; reporte HTML con líneas y ramas; y panel de SonarQube con Quality Gate aprobado. Incorporarlas al reporte técnico PDF junto con portada, arquitectura y enlace al repositorio. No se incluyen resultados simulados.
+| Métrica global | Condición para fallar |
+|---|---|
+| Coverage | Menor a 80 % |
+| Bugs | Mayor a 0 |
+| Vulnerabilities | Mayor a 0 |
+| Code Smells | Mayor a 0 |
+
+La instancia local de la práctica ya tiene este Quality Gate asignado. El panel puede consultarse en `http://localhost:9000/dashboard?id=telemetria-incidents`, con una cuenta autorizada. Si el contenedor existente está detenido, se inicia con `docker start sonarqube`.
+
+## Resultados verificados y entregables
+
+La verificación del 13 de noviembre de 2026 obtuvo 12 pruebas aprobadas, sin fallos, errores ni omisiones. JaCoCo registró 37 de 39 líneas cubiertas (94.87 %); ramas n/a porque no hay ramas medibles. SonarQube aprobó las condiciones globales del Quality Gate, con cobertura 94.9 %, 0 bugs, 0 vulnerabilidades, 0 Code Smells y 0 Security Hotspots.
+
+- [Reporte técnico PDF](../output/pdf/HU-01_Reporte_tecnico.pdf): portada, descripción técnica y capturas reales de Swagger, pruebas, JaCoCo y SonarQube.
+- [Checklist HU-01](CHECKLIST-HU-01.md) y [registro de verificación](VERIFICACION-HU-01.md).
+- [HTML portable de JaCoCo](evidence/jacoco/index.html).
+- [Registro Maven](evidence/verify.txt), [registro del análisis](evidence/sonar.txt), [métricas y Quality Gate](evidence/sonar-results.json) y [respuestas de Swagger](evidence/swagger-responses.json).
+- [Repositorio público en la rama de entrega](https://github.com/JustPolar1/telemetria/tree/feature/incidents-mongodb-hu01).
+
+Los porcentajes anteriores corresponden a líneas. El HTML de JaCoCo muestra además 98 % de instrucciones; son métricas distintas. Los tokens temporales de análisis se revocaron al finalizar y no se incluyen en los entregables.

@@ -1,6 +1,6 @@
 # Checklist HU-01
 
-Alcance: microservicio `incident-service`. Una casilla pendiente puede tener código implementado, pero todavía carecer de evidencia de ejecución. Estado revisado el 12 de noviembre de 2026.
+Alcance: microservicio `incident-service`. Estado revisado el 13 de noviembre de 2026. Las evidencias se conservan en `evidence/` y en el reporte técnico PDF.
 
 ## 1. Microservicio y base NoSQL
 
@@ -22,17 +22,17 @@ Alcance: microservicio `incident-service`. Una casilla pendiente puede tener có
 ## 4. JaCoCo
 
 - [x] Configurar JaCoCo para generar HTML/XML y exigir un mínimo de 80 % de líneas y ramas.
-- [x] Generar el reporte de una compilación con todas las pruebas, incluida integración. `clean verify` aprobó sin omitir pruebas: 94.87 % de líneas (37 de 39). No se detectaron ramas medibles (no equivale a 100 % de ramas). HTML local en `target/site/jacoco/index.html`; falta incorporar su evidencia al PDF.
+- [x] Generar y conservar el reporte de una compilación con todas las pruebas, incluida integración. `clean verify` aprobó sin omitir pruebas: 94.87 % de líneas (37 de 39). No se detectaron ramas medibles (no equivale a 100 % de ramas). HTML portable en `evidence/jacoco/index.html` y captura incorporada al PDF.
 
 ## 5. SonarQube
 
-- [ ] Ejecutar el análisis del código fuente en SonarQube. El plugin y la ruta al reporte de cobertura están configurados; no hay evidencia de análisis realizado.
-- [ ] Aprobar el Quality Gate y verificar ausencia de bugs críticos y vulnerabilidades, con control de Code Smells. Corregir lo que indique el análisis y volver a ejecutarlo si es necesario.
+- [x] Ejecutar el análisis del código fuente en SonarQube, importando cobertura y resultados de las 12 pruebas. Evidencias en `evidence/sonar.txt` y `evidence/sonar-results.json`.
+- [x] Aprobar el Quality Gate: cobertura global >= 80 %, 0 bugs, 0 vulnerabilidades y 0 Code Smells. Todas las condiciones globales evaluadas aprobaron; cobertura importada 94.9 %. Se registraron además 0 Security Hotspots.
 
 ## 6. Entregables
 
-- [ ] Entregar enlace al repositorio público o institucional con los cambios accesibles, commits estructurados y README de ejecución. README y commits locales están preparados; falta publicar los cambios y comprobar el acceso al enlace de entrega.
-- [ ] Entregar reporte técnico PDF formal con portada y las siguientes evidencias:
+- [x] Entregar enlace al repositorio público con commits estructurados y README de ejecución: https://github.com/JustPolar1/telemetria/tree/feature/incidents-mongodb-hu01 . Rama publicada y acceso al repositorio comprobado.
+- [x] Entregar reporte técnico PDF formal: `output/pdf/HU-01_Reporte_tecnico.pdf` desde la raíz, con portada y las siguientes evidencias:
   - Endpoints funcionando en Postman o Swagger.
   - Ejecución de pruebas unitarias y de integración.
   - Reporte JaCoCo con líneas y ramas.
@@ -46,6 +46,6 @@ Con Docker disponible, desde la raíz del repositorio:
 mvn -f incident-service/pom.xml clean verify
 ```
 
-Ejecutado satisfactoriamente el 12 de noviembre de 2026: 7 pruebas de servicio, 4 de contrato web y 1 de integración con MongoDB real; sin fallos, errores ni omisiones. Detalles en `VERIFICACION-HU-01.md`.
+Ejecutado satisfactoriamente el 13 de noviembre de 2026: 7 pruebas de servicio, 4 de contrato web y 1 de integración con MongoDB real; sin fallos, errores ni omisiones. Se verificó también Swagger UI y se capturaron respuestas reales 201, 200, 204, 400 y 404. Detalles en `VERIFICACION-HU-01.md`.
 
-Siguiente paso: ejecutar SonarQube y verificar su Quality Gate. También quedan las capturas de Postman y los entregables indicados arriba.
+SonarQube y su Quality Gate también se verificaron satisfactoriamente. El PDF y los archivos de evidencia acompañan a la entrega.

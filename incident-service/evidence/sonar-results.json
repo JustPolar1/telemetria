@@ -1,0 +1,117 @@
+{
+  "projectKey": "telemetria-incidents",
+  "serverVersion": "26.11.0.134175",
+  "analyzedRevision": "82b64df7b9b7837e342b5b91aa9d9d344b497ce9",
+  "analysisId": "ebfaeee9-18ee-4d23-9580-6a70f0257845",
+  "analyzedAt": "2026-11-13T00:11:57-06:00",
+  "qualityGateName": "HU-01 Incidencias",
+  "qualityGate": {
+    "status": "OK",
+    "conditions": [
+      {
+        "status": "OK",
+        "metricKey": "coverage",
+        "comparator": "LT",
+        "errorThreshold": "80",
+        "actualValue": "94.9"
+      },
+      {
+        "status": "OK",
+        "metricKey": "new_duplicated_lines_density",
+        "comparator": "GT",
+        "errorThreshold": "3",
+        "actualValue": "0.0"
+      },
+      {
+        "status": "OK",
+        "metricKey": "bugs",
+        "comparator": "GT",
+        "errorThreshold": "0",
+        "actualValue": "0"
+      },
+      {
+        "status": "OK",
+        "metricKey": "code_smells",
+        "comparator": "GT",
+        "errorThreshold": "0",
+        "actualValue": "0"
+      },
+      {
+        "status": "OK",
+        "metricKey": "new_violations",
+        "comparator": "GT",
+        "errorThreshold": "0",
+        "actualValue": "0"
+      },
+      {
+        "status": "OK",
+        "metricKey": "vulnerabilities",
+        "comparator": "GT",
+        "errorThreshold": "0",
+        "actualValue": "0"
+      }
+    ],
+    "ignoredConditions": false,
+    "period": {
+      "mode": "PREVIOUS_VERSION",
+      "date": "2026-11-12T23:53:29-06:00"
+    },
+    "caycStatus": "over-compliant"
+  },
+  "measures": [
+    {
+      "metric": "coverage",
+      "value": "94.9",
+      "bestValue": false
+    },
+    {
+      "metric": "bugs",
+      "value": "0",
+      "bestValue": true
+    },
+    {
+      "metric": "test_failures",
+      "value": "0",
+      "bestValue": true
+    },
+    {
+      "metric": "code_smells",
+      "value": "0",
+      "bestValue": true
+    },
+    {
+      "metric": "duplicated_lines_density",
+      "value": "0.0",
+      "bestValue": true
+    },
+    {
+      "metric": "tests",
+      "value": "12"
+    },
+    {
+      "metric": "vulnerabilities",
+      "value": "0",
+      "bestValue": true
+    },
+    {
+      "metric": "line_coverage",
+      "value": "94.9",
+      "bestValue": false
+    },
+    {
+      "metric": "security_hotspots",
+      "value": "0",
+      "bestValue": true
+    },
+    {
+      "metric": "skipped_tests",
+      "value": "0",
+      "bestValue": true
+    },
+    {
+      "metric": "test_errors",
+      "value": "0",
+      "bestValue": true
+    }
+  ]
+}

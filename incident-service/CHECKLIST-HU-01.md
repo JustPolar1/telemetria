@@ -5,7 +5,7 @@ Alcance: microservicio `incident-service`. Una casilla pendiente puede tener có
 ## 1. Microservicio y base NoSQL
 
 - [x] Implementar un microservicio con un framework moderno: Spring Boot.
-- [ ] Verificar conexión correcta a MongoDB y operaciones CRUD completas sobre incidencias. Los endpoints y repositorio están implementados; falta ejecutarlos contra MongoDB real.
+- [x] Verificar conexión correcta a MongoDB y operaciones CRUD completas sobre incidencias. `IncidentMongoIT` aprobada con MongoDB 8.0 real en Testcontainers.
 - [x] Aplicar validaciones de campos obligatorios, tamaños, formato del sensor y estado permitido.
 
 ## 2. Errores y excepciones
@@ -17,12 +17,12 @@ Alcance: microservicio `incident-service`. Una casilla pendiente puede tener có
 ## 3. Pruebas
 
 - [x] Desarrollar y ejecutar pruebas unitarias de servicios con JUnit y Mockito, incluyendo éxito y error: 7 aprobadas.
-- [ ] Ejecutar satisfactoriamente la integración del flujo completo de endpoints con MongoDB, serialización y respuestas HTTP. `IncidentMongoIT` está implementada; falta ejecutarla. Las 4 pruebas de contrato web aprobadas usan un servicio simulado y no acreditan persistencia real.
+- [x] Ejecutar satisfactoriamente la integración del flujo completo de endpoints con MongoDB, serialización y respuestas HTTP. `IncidentMongoIT` aprobada sin omisiones; también se aprobaron las 4 pruebas de contrato web.
 
 ## 4. JaCoCo
 
 - [x] Configurar JaCoCo para generar HTML/XML y exigir un mínimo de 80 % de líneas y ramas.
-- [ ] Generar y conservar el reporte de una compilación con todas las pruebas, incluida integración. La ejecución parcial con `-DskipITs=true` produjo 94.87 % de líneas; no detectó ramas medibles (no equivale a 100 % de ramas).
+- [x] Generar el reporte de una compilación con todas las pruebas, incluida integración. `clean verify` aprobó sin omitir pruebas: 94.87 % de líneas (37 de 39). No se detectaron ramas medibles (no equivale a 100 % de ramas). HTML local en `target/site/jacoco/index.html`; falta incorporar su evidencia al PDF.
 
 ## 5. SonarQube
 
@@ -38,13 +38,14 @@ Alcance: microservicio `incident-service`. Una casilla pendiente puede tener có
   - Reporte JaCoCo con líneas y ramas.
   - Panel SonarQube y Quality Gate.
 
-## Siguiente verificación
+## Verificación realizada
 
 Con Docker disponible, desde la raíz del repositorio:
 
 ```powershell
-docker compose -f incident-service/compose.yaml up --build -d
 mvn -f incident-service/pom.xml clean verify
 ```
 
-Después, probar los endpoints con la colección de Postman, ejecutar SonarQube y recopilar las evidencias para el PDF. Al revisar este checklist, Docker no estaba disponible y no existía un reporte de ejecución de la prueba de integración.
+Ejecutado satisfactoriamente el 12 de noviembre de 2026: 7 pruebas de servicio, 4 de contrato web y 1 de integración con MongoDB real; sin fallos, errores ni omisiones. Detalles en `VERIFICACION-HU-01.md`.
+
+Siguiente paso: ejecutar SonarQube y verificar su Quality Gate. También quedan las capturas de Postman y los entregables indicados arriba.

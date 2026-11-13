@@ -10,7 +10,7 @@ Desde la raíz del repositorio, con Docker Desktop iniciado:
 docker compose -f incident-service/compose.yaml up --build -d
 ```
 
-API: `http://localhost:8083/api/v1/incidents`. MongoDB: `localhost:27017`, base `incidents`. El Compose raíz también incluye estos servicios, pero requiere las variables de seguridad de los servicios anteriores. La configuración independiente publica ambos puertos solo en loopback y está destinada al laboratorio local, sin autenticación.
+API: `http://localhost:8083/api/v1/incidents`. MongoDB: `localhost:27018`, base `incidents`. Se usa 27018 para no interferir con instalaciones locales de MongoDB en 27017. El Compose raíz también incluye estos servicios, pero requiere las variables de seguridad de los servicios anteriores. La configuración independiente publica ambos puertos solo en loopback y está destinada al laboratorio local, sin autenticación.
 
 Para ejecutar Java fuera de Docker:
 
@@ -20,6 +20,8 @@ mvn -f incident-service/pom.xml spring-boot:run
 ```
 
 Variables opcionales: `MONGODB_URI` y `SERVER_PORT` (8083). Los datos se conservan en un volumen. Detener sin borrar datos:
+
+Swagger UI está disponible en `http://localhost:8083/swagger-ui/index.html` y el contrato OpenAPI en `/v3/api-docs`. Para cambiar el puerto publicado de MongoDB, define `INCIDENT_MONGO_PORT` en Compose; si ejecutas Java fuera de Docker, ajusta también `MONGODB_URI`.
 
 ```powershell
 docker compose -f incident-service/compose.yaml down

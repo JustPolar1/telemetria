@@ -1,3 +1,6 @@
+include:
+  - incident-service/compose.yaml
+
 services:
   parcel-db:
     image: postgres:17

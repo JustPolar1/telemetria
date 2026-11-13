@@ -1,0 +1,84 @@
+{
+  "info": {
+    "name": "Incidencias MongoDB HU-01",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "incidentId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Crear",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://localhost:8083/api/v1/incidents",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sensorId\": \"sensor-01\",\n  \"titulo\": \"Lecturas intermitentes\",\n  \"descripcion\": \"El sensor dejó de reportar humedad\",\n  \"estado\": \"ABIERTA\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Incidencia creada', () => pm.response.to.have.status(201));",
+              "if (pm.response.code === 201) pm.collectionVariables.set('incidentId', pm.response.json().id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Listar",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:8083/api/v1/incidents?page=0&size=20"
+      }
+    },
+    {
+      "name": "Consultar",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:8083/api/v1/incidents/{{incidentId}}"
+      }
+    },
+    {
+      "name": "Actualizar",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://localhost:8083/api/v1/incidents/{{incidentId}}",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"sensorId\": \"sensor-01\",\n  \"titulo\": \"Lecturas intermitentes\",\n  \"descripcion\": \"El sensor dejó de reportar humedad\",\n  \"estado\": \"RESUELTA\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Eliminar",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "http://localhost:8083/api/v1/incidents/{{incidentId}}"
+      }
+    }
+  ]
+}

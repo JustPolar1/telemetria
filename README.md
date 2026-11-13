@@ -1,5 +1,9 @@
 # Huertos comunitarios y telemetría ambiental
 
+## HU-01: microservicio NoSQL de incidencias
+
+Se incorpora **Incident Service**, un tercer microservicio independiente con CRUD en MongoDB, validaciones, excepciones personalizadas, pruebas y configuración de JaCoCo y SonarQube. Consulta [sus instrucciones de ejecución y verificación](incident-service/README.md). Puede iniciarse por separado sin configurar JWT ni certificados de los otros servicios.
+
 Proyecto académico Java/Spring Boot con dos microservicios y PostgreSQL:
 
 - **Parcel Service**: CRUD de parcelas con ubicación, tipo de suelo y responsable.

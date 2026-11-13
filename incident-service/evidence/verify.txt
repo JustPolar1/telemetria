@@ -1,0 +1,212 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< com.telemetria:incident-service >-------------------
+[INFO] Building incident-service 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/springdoc/springdoc-openapi-starter-webmvc-ui/3.2.0/springdoc-openapi-starter-webmvc-ui-3.2.0.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/springdoc/springdoc-openapi-starter-webmvc-ui/3.2.0/springdoc-openapi-starter-webmvc-ui-3.2.0.pom (2.1 kB at 1.6 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/springdoc/springdoc-openapi/3.2.0/springdoc-openapi-3.2.0.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/springdoc/springdoc-openapi/3.2.0/springdoc-openapi-3.2.0.pom (9.6 kB at 103 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/springframework/cloud/spring-cloud-function-dependencies/5.0.5/spring-cloud-function-dependencies-5.0.5.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/springframework/cloud/spring-cloud-function-dependencies/5.0.5/spring-cloud-function-dependencies-5.0.5.pom (5.0 kB at 75 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/springframework/cloud/spring-cloud-dependencies-parent/5.0.4/spring-cloud-dependencies-parent-5.0.4.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/springframework/cloud/spring-cloud-dependencies-parent/5.0.4/spring-cloud-dependencies-parent-5.0.4.pom (7.4 kB at 109 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/springframework/ai/spring-ai-bom/2.0.1/spring-ai-bom-2.0.1.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/springframework/ai/spring-ai-bom/2.0.1/spring-ai-bom-2.0.1.pom (37 kB at 381 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/springdoc/springdoc-openapi-starter-webmvc-api/3.2.0/springdoc-openapi-starter-webmvc-api-3.2.0.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/springdoc/springdoc-openapi-starter-webmvc-api/3.2.0/springdoc-openapi-starter-webmvc-api-3.2.0.pom (2.5 kB at 37 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/springdoc/springdoc-openapi-starter-common/3.2.0/springdoc-openapi-starter-common-3.2.0.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/springdoc/springdoc-openapi-starter-common/3.2.0/springdoc-openapi-starter-common-3.2.0.pom (7.1 kB at 113 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/io/swagger/core/v3/swagger-core-jakarta/2.2.55/swagger-core-jakarta-2.2.55.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/io/swagger/core/v3/swagger-core-jakarta/2.2.55/swagger-core-jakarta-2.2.55.pom (5.6 kB at 72 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/io/swagger/core/v3/swagger-project-jakarta/2.2.55/swagger-project-jakarta-2.2.55.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/io/swagger/core/v3/swagger-project-jakarta/2.2.55/swagger-project-jakarta-2.2.55.pom (22 kB at 288 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/io/swagger/core/v3/swagger-annotations-jakarta/2.2.55/swagger-annotations-jakarta-2.2.55.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/io/swagger/core/v3/swagger-annotations-jakarta/2.2.55/swagger-annotations-jakarta-2.2.55.pom (3.3 kB at 34 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/io/swagger/core/v3/swagger-models-jakarta/2.2.55/swagger-models-jakarta-2.2.55.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/io/swagger/core/v3/swagger-models-jakarta/2.2.55/swagger-models-jakarta-2.2.55.pom (3.4 kB at 34 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/webjars/swagger-ui/5.34.0/swagger-ui-5.34.0.pom
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/webjars/swagger-ui/5.34.0/swagger-ui-5.34.0.pom (1.4 kB at 17 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/springdoc/springdoc-openapi-starter-webmvc-ui/3.2.0/springdoc-openapi-starter-webmvc-ui-3.2.0.jar
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/springdoc/springdoc-openapi-starter-webmvc-ui/3.2.0/springdoc-openapi-starter-webmvc-ui-3.2.0.jar (25 kB at 215 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/springdoc/springdoc-openapi-starter-webmvc-api/3.2.0/springdoc-openapi-starter-webmvc-api-3.2.0.jar
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/springdoc/springdoc-openapi-starter-common/3.2.0/springdoc-openapi-starter-common-3.2.0.jar
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/io/swagger/core/v3/swagger-core-jakarta/2.2.55/swagger-core-jakarta-2.2.55.jar
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/io/swagger/core/v3/swagger-annotations-jakarta/2.2.55/swagger-annotations-jakarta-2.2.55.jar
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/io/swagger/core/v3/swagger-models-jakarta/2.2.55/swagger-models-jakarta-2.2.55.jar
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/springdoc/springdoc-openapi-starter-webmvc-api/3.2.0/springdoc-openapi-starter-webmvc-api-3.2.0.jar (48 kB at 484 kB/s)
+[INFO] Downloading from central: https://repo.maven.apache.org/maven2/org/webjars/swagger-ui/5.34.0/swagger-ui-5.34.0.jar
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/io/swagger/core/v3/swagger-annotations-jakarta/2.2.55/swagger-annotations-jakarta-2.2.55.jar (51 kB at 250 kB/s)
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/io/swagger/core/v3/swagger-models-jakarta/2.2.55/swagger-models-jakarta-2.2.55.jar (147 kB at 493 kB/s)
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/io/swagger/core/v3/swagger-core-jakarta/2.2.55/swagger-core-jakarta-2.2.55.jar (273 kB at 839 kB/s)
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/springdoc/springdoc-openapi-starter-common/3.2.0/springdoc-openapi-starter-common-3.2.0.jar (613 kB at 1.5 MB/s)
+[INFO] Downloaded from central: https://repo.maven.apache.org/maven2/org/webjars/swagger-ui/5.34.0/swagger-ui-5.34.0.jar (1.2 MB at 2.8 MB/s)
+[INFO] 
+[INFO] --- clean:3.5.0:clean (default-clean) @ incident-service ---
+[INFO] Deleting C:\Users\Lenovo\Documents\utch\9o cuatrimestre\Desarrollo Web Integral\Unidad II\Telemetr�a_b�sica\incident-service\target
+[INFO] 
+[INFO] --- jacoco:0.8.14:prepare-agent (default) @ incident-service ---
+[INFO] argLine set to "-javaagent:C:\\Users\\Lenovo\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.14\\org.jacoco.agent-0.8.14-runtime.jar=destfile=C:\\Users\\Lenovo\\Documents\\utch\\9o cuatrimestre\\Desarrollo Web Integral\\Unidad II\\Telemetr�a_b�sica\\incident-service\\target\\jacoco.exec"
+[INFO] 
+[INFO] --- resources:3.5.0:resources (default-resources) @ incident-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.15.0:compile (default-compile) @ incident-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 11 source files with javac [debug parameters release 21] to target\classes
+[INFO] 
+[INFO] --- resources:3.5.0:testResources (default-testResources) @ incident-service ---
+[INFO] skip non existing resourceDirectory C:\Users\Lenovo\Documents\utch\9o cuatrimestre\Desarrollo Web Integral\Unidad II\Telemetr�a_b�sica\incident-service\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.15.0:testCompile (default-testCompile) @ incident-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 3 source files with javac [debug parameters release 21] to target\test-classes
+[INFO] 
+[INFO] --- surefire:3.5.6:test (default-test) @ incident-service ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.telemetria.incidents.IncidentControllerTests
+00:01:04.178 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.telemetria.incidents.IncidentControllerTests]: IncidentControllerTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+00:01:05.817 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.telemetria.incidents.IncidentApplication for test class com.telemetria.incidents.IncidentControllerTests
+00:01:05.829 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.telemetria.incidents.IncidentControllerTests]: IncidentControllerTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+00:01:05.907 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.telemetria.incidents.IncidentApplication for test class com.telemetria.incidents.IncidentControllerTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-11-13T00:01:09.372-06:00  INFO 20452 --- [incident-service] [           main] c.t.incidents.IncidentControllerTests    : Starting IncidentControllerTests using Java 21.0.12.1 with PID 20452 (started by Lenovo in C:\Users\Lenovo\Documents\utch\9o cuatrimestre\Desarrollo Web Integral\Unidad II\Telemetr�a_b�sica\incident-service)
+2026-11-13T00:01:09.377-06:00  INFO 20452 --- [incident-service] [           main] c.t.incidents.IncidentControllerTests    : No active profile set, falling back to 1 default profile: "default"
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\Lenovo\.m2\repository\net\bytebuddy\byte-buddy-agent\1.18.11\byte-buddy-agent-1.18.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-11-13T00:01:24.343-06:00  INFO 20452 --- [incident-service] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-13T00:01:24.347-06:00  INFO 20452 --- [incident-service] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-13T00:01:24.356-06:00  INFO 20452 --- [incident-service] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 6 ms
+2026-11-13T00:01:24.635-06:00  INFO 20452 --- [incident-service] [           main] c.t.incidents.IncidentControllerTests    : Started IncidentControllerTests in 18.061 seconds (process running for 27.82)
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 25.91 s -- in com.telemetria.incidents.IncidentControllerTests
+[INFO] Running com.telemetria.incidents.IncidentServiceTests
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.823 s -- in com.telemetria.incidents.IncidentServiceTests
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jar:3.5.1:jar (default-jar) @ incident-service ---
+[INFO] Building jar: C:\Users\Lenovo\Documents\utch\9o cuatrimestre\Desarrollo Web Integral\Unidad II\Telemetr�a_b�sica\incident-service\target\incident-service-0.0.1-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:4.1.1:repackage (repackage) @ incident-service ---
+[INFO] Replacing main artifact C:\Users\Lenovo\Documents\utch\9o cuatrimestre\Desarrollo Web Integral\Unidad II\Telemetr�a_b�sica\incident-service\target\incident-service-0.0.1-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to C:\Users\Lenovo\Documents\utch\9o cuatrimestre\Desarrollo Web Integral\Unidad II\Telemetr�a_b�sica\incident-service\target\incident-service-0.0.1-SNAPSHOT.jar.original
+[INFO] 
+[INFO] --- failsafe:3.5.6:integration-test (default) @ incident-service ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.telemetria.incidents.IncidentMongoIT
+00:01:44.654 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.telemetria.incidents.IncidentMongoIT]: IncidentMongoIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+00:01:46.066 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.telemetria.incidents.IncidentApplication for test class com.telemetria.incidents.IncidentMongoIT
+00:01:46.784 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.telemetria.incidents.IncidentMongoIT]: IncidentMongoIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+00:01:46.800 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.telemetria.incidents.IncidentApplication for test class com.telemetria.incidents.IncidentMongoIT
+00:01:47.264 [main] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
+00:01:47.290 [main] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v4.1.1)
+
+2026-11-13T00:01:49.389-06:00  INFO 34116 --- [incident-service] [           main] org.testcontainers.DockerClientFactory   : Testcontainers version: 2.0.5
+2026-11-13T00:01:52.118-06:00  INFO 34116 --- [incident-service] [           main] o.t.d.DockerClientProviderStrategy       : Loaded org.testcontainers.dockerclient.NpipeSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+2026-11-13T00:01:55.374-06:00  INFO 34116 --- [incident-service] [           main] o.t.d.DockerClientProviderStrategy       : Found Docker environment with local Npipe socket (npipe:////./pipe/docker_engine)
+2026-11-13T00:01:55.385-06:00  INFO 34116 --- [incident-service] [           main] org.testcontainers.DockerClientFactory   : Docker host IP address is localhost
+2026-11-13T00:01:55.567-06:00  INFO 34116 --- [incident-service] [           main] org.testcontainers.DockerClientFactory   : Connected to docker: 
+  Server Version: 29.9.2
+  API Version: 1.56
+  Operating System: Docker Desktop
+  Total Memory: 7860 MB
+  Labels: 
+    com.docker.desktop.address=npipe://\\.\pipe\docker_cli
+2026-11-13T00:01:56.416-06:00  INFO 34116 --- [incident-service] [           main] tc.testcontainers/ryuk:0.14.0            : Creating container for image: testcontainers/ryuk:0.14.0
+2026-11-13T00:01:56.938-06:00  INFO 34116 --- [incident-service] [           main] o.t.utility.RegistryAuthLocator          : Credential helper/store (docker-credential-desktop) does not have credentials for https://index.docker.io/v1/
+2026-11-13T00:01:57.822-06:00  INFO 34116 --- [incident-service] [           main] tc.testcontainers/ryuk:0.14.0            : Container testcontainers/ryuk:0.14.0 is starting: 65544014923f62217513466778f8c77dfa0acab41f559b4d05b5d2737963d308
+2026-11-13T00:02:00.251-06:00  INFO 34116 --- [incident-service] [           main] tc.testcontainers/ryuk:0.14.0            : Container testcontainers/ryuk:0.14.0 started in PT3.8350744S
+2026-11-13T00:02:00.295-06:00  INFO 34116 --- [incident-service] [           main] o.t.utility.RyukResourceReaper           : Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+2026-11-13T00:02:00.295-06:00  INFO 34116 --- [incident-service] [           main] org.testcontainers.DockerClientFactory   : Checking the system...
+2026-11-13T00:02:00.297-06:00  INFO 34116 --- [incident-service] [           main] org.testcontainers.DockerClientFactory   : ?? Docker server version should be at least 1.6.0
+2026-11-13T00:02:00.299-06:00  INFO 34116 --- [incident-service] [           main] tc.mongo:8.0                             : Creating container for image: mongo:8.0
+2026-11-13T00:02:00.846-06:00  INFO 34116 --- [incident-service] [           main] tc.mongo:8.0                             : Container mongo:8.0 is starting: 0b31f3527507139dc300c217b0f98341813544e6deb6d9ec779127fd7b05957f
+2026-11-13T00:02:06.782-06:00  INFO 34116 --- [incident-service] [           main] tc.mongo:8.0                             : Container mongo:8.0 started in PT6.4831102S
+2026-11-13T00:02:06.863-06:00  INFO 34116 --- [incident-service] [           main] c.telemetria.incidents.IncidentMongoIT   : Starting IncidentMongoIT using Java 21.0.12.1 with PID 34116 (started by Lenovo in C:\Users\Lenovo\Documents\utch\9o cuatrimestre\Desarrollo Web Integral\Unidad II\Telemetr�a_b�sica\incident-service)
+2026-11-13T00:02:06.872-06:00  INFO 34116 --- [incident-service] [           main] c.telemetria.incidents.IncidentMongoIT   : No active profile set, falling back to 1 default profile: "default"
+2026-11-13T00:02:09.467-06:00  INFO 34116 --- [incident-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2026-11-13T00:02:09.622-06:00  INFO 34116 --- [incident-service] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 130 ms. Found 1 MongoDB repository interface.
+2026-11-13T00:02:11.360-06:00  INFO 34116 --- [incident-service] [           main] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|spring-boot|sync", "version": "5.8.1"}, "os": {"type": "Windows", "name": "Windows 10", "architecture": "amd64", "version": "10.0"}, "platform": "Java/Oracle Corporation/21.0.12.1+1-LTS-4"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@7359781c, com.mongodb.Jep395RecordCodecProvider@73985c99, com.mongodb.KotlinCodecProvider@36477cf, EnumCodecProvider{}]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:62867], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=UNSPECIFIED, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2026-11-13T00:02:11.382-06:00  INFO 34116 --- [incident-service] [localhost:62867] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=localhost:62867, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=67420600, minRoundTripTimeNanos=0}
+2026-11-13T00:02:15.726-06:00  INFO 34116 --- [incident-service] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-11-13T00:02:15.727-06:00  INFO 34116 --- [incident-service] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-11-13T00:02:15.733-06:00  INFO 34116 --- [incident-service] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 4 ms
+2026-11-13T00:02:15.830-06:00  INFO 34116 --- [incident-service] [           main] c.telemetria.incidents.IncidentMongoIT   : Started IncidentMongoIT in 28.135 seconds (process running for 37.957)
+2026-11-13T00:02:15.838-06:00  WARN 34116 --- [incident-service] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-11-13T00:02:15.838-06:00  WARN 34116 --- [incident-service] [           main] o.s.core.events.SpringDocAppInitializer  : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\Lenovo\.m2\repository\net\bytebuddy\byte-buddy-agent\1.18.11\byte-buddy-agent-1.18.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+2026-11-13T00:02:19.655-06:00  INFO 34116 --- [incident-service] [           main] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 1146 ms
+2026-11-13T00:02:21.630-06:00  INFO 34116 --- [incident-service] [localhost:62867] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server localhost:62867
+
+com.mongodb.MongoSocketReadException: Prematurely reached end of stream
+	at com.mongodb.internal.connection.SocketStream.read(SocketStream.java:184) ~[mongodb-driver-core-5.8.1.jar:na]
+	at com.mongodb.internal.connection.InternalStreamConnection.receiveResponseBuffers(InternalStreamConnection.java:942) ~[mongodb-driver-core-5.8.1.jar:na]
+	at com.mongodb.internal.connection.InternalStreamConnection.receiveCommandMessageResponse(InternalStreamConnection.java:567) ~[mongodb-driver-core-5.8.1.jar:na]
+	at com.mongodb.internal.connection.InternalStreamConnection.receive(InternalStreamConnection.java:519) ~[mongodb-driver-core-5.8.1.jar:na]
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.doHeartbeat(DefaultServerMonitor.java:311) ~[mongodb-driver-core-5.8.1.jar:na]
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.lookupServerDescription(DefaultServerMonitor.java:262) ~[mongodb-driver-core-5.8.1.jar:na]
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.run(DefaultServerMonitor.java:203) ~[mongodb-driver-core-5.8.1.jar:na]
+
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 39.60 s -- in com.telemetria.incidents.IncidentMongoIT
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- failsafe:3.5.6:verify (default) @ incident-service ---
+[INFO] 
+[INFO] --- jacoco:0.8.14:report (report-and-check) @ incident-service ---
+[INFO] Loading execution data file C:\Users\Lenovo\Documents\utch\9o cuatrimestre\Desarrollo Web Integral\Unidad II\Telemetr�a_b�sica\incident-service\target\jacoco.exec
+[INFO] Analyzed bundle 'incident-service' with 10 classes
+[INFO] 
+[INFO] --- jacoco:0.8.14:check (report-and-check) @ incident-service ---
+[INFO] Loading execution data file C:\Users\Lenovo\Documents\utch\9o cuatrimestre\Desarrollo Web Integral\Unidad II\Telemetr�a_b�sica\incident-service\target\jacoco.exec
+[INFO] Analyzed bundle 'incident-service' with 10 classes
+[INFO] All coverage checks have been met.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:56 min
+[INFO] Finished at: 2026-11-13T00:02:24-06:00
+[INFO] ------------------------------------------------------------------------

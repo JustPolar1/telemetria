@@ -1,0 +1,44 @@
+[
+  {
+    "method": "POST",
+    "url": "http://localhost:8083/api/v1/incidents",
+    "status": 201,
+    "body": "{\"id\":\"6af6b838e24e022a1392b3b1\",\"folio\":\"3fcfc378-d1b3-4ff2-ad84-50cdff64915a\",\"sensorId\":\"sensor-evidencia-hu01\",\"titulo\":\"Lecturas intermitentes\",\"descripcion\":\"Incidencia de laboratorio para verificar el CRUD con MongoDB\",\"estado\":\"ABIERTA\",\"fechaCreacion\":\"2026-11-13T07:11:52.971509629Z\"}"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:8083/api/v1/incidents/6af6b838e24e022a1392b3b1",
+    "status": 200,
+    "body": "{\"id\":\"6af6b838e24e022a1392b3b1\",\"folio\":\"3fcfc378-d1b3-4ff2-ad84-50cdff64915a\",\"sensorId\":\"sensor-evidencia-hu01\",\"titulo\":\"Lecturas intermitentes\",\"descripcion\":\"Incidencia de laboratorio para verificar el CRUD con MongoDB\",\"estado\":\"ABIERTA\",\"fechaCreacion\":\"2026-11-13T07:11:52.971Z\"}"
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:8083/api/v1/incidents?page=0&size=20",
+    "status": 200,
+    "body": "{\"content\":[{\"id\":\"6af6b838e24e022a1392b3b1\",\"folio\":\"3fcfc378-d1b3-4ff2-ad84-50cdff64915a\",\"sensorId\":\"sensor-evidencia-hu01\",\"titulo\":\"Lecturas intermitentes\",\"descripcion\":\"Incidencia de laboratorio para verificar el CRUD con MongoDB\",\"estado\":\"ABIERTA\",\"fechaCreacion\":\"2026-11-13T07:11:52.971Z\"}],\"totalElements\":1,\"totalPages\":1,\"number\":0,\"size\":20}"
+  },
+  {
+    "method": "PUT",
+    "url": "http://localhost:8083/api/v1/incidents/6af6b838e24e022a1392b3b1",
+    "status": 200,
+    "body": "{\"id\":\"6af6b838e24e022a1392b3b1\",\"folio\":\"3fcfc378-d1b3-4ff2-ad84-50cdff64915a\",\"sensorId\":\"sensor-evidencia-hu01\",\"titulo\":\"Lecturas intermitentes\",\"descripcion\":\"Incidencia de laboratorio para verificar el CRUD con MongoDB\",\"estado\":\"RESUELTA\",\"fechaCreacion\":\"2026-11-13T07:11:52.971Z\"}"
+  },
+  {
+    "method": "DELETE",
+    "url": "http://localhost:8083/api/v1/incidents/6af6b838e24e022a1392b3b1",
+    "status": 204,
+    "body": ""
+  },
+  {
+    "method": "GET",
+    "url": "http://localhost:8083/api/v1/incidents/6af6b838e24e022a1392b3b1",
+    "status": 404,
+    "body": "{\"error\":\"No existe la incidencia: 6af6b838e24e022a1392b3b1\"}"
+  },
+  {
+    "method": "POST",
+    "url": "http://localhost:8083/api/v1/incidents",
+    "status": 400,
+    "body": "{\"error\":\"descripcion: no debe estar vacío; titulo: no debe estar vacío; estado: no debe ser nulo; sensorId: no debe estar vacío\"}"
+  }
+]

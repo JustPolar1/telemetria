@@ -1,0 +1,11 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+incident-service,com.telemetria.incidents,IncidentNotFoundException,0,5,0,0,0,1,0,1,0,1
+incident-service,com.telemetria.incidents,IncidentRequest,0,15,0,0,0,1,0,1,0,1
+incident-service,com.telemetria.incidents,IncidentStatus,0,21,0,0,0,1,0,1,0,1
+incident-service,com.telemetria.incidents,DuplicateIncidentException,0,4,0,0,0,1,0,1,0,1
+incident-service,com.telemetria.incidents,IncidentApplication,5,3,0,0,2,1,1,1,1,1
+incident-service,com.telemetria.incidents,Incident,0,24,0,0,0,1,0,1,0,1
+incident-service,com.telemetria.incidents,IncidentService,0,99,0,0,0,11,0,8,0,8
+incident-service,com.telemetria.incidents,IncidentController,0,44,0,0,0,8,0,6,0,6
+incident-service,com.telemetria.incidents,IncidentPage,0,32,0,0,0,3,0,2,0,2
+incident-service,com.telemetria.incidents,IncidentExceptionHandler,0,53,0,0,0,9,0,8,0,8

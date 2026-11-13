@@ -1,11 +1,18 @@
 # Huertos comunitarios y telemetría ambiental
 
-Proyecto académico Java/Spring Boot con dos microservicios y PostgreSQL:
+## HU-01: microservicio NoSQL de incidencias
+
+Se incorpora **Incident Service**, un tercer microservicio independiente con CRUD en MongoDB, validaciones, excepciones personalizadas, pruebas y configuración de JaCoCo y SonarQube. Consulta [sus instrucciones de ejecución y verificación](incident-service/README.md). Puede iniciarse por separado sin configurar JWT ni certificados de los otros servicios.
+
+**Entrega HU-01:** [reporte técnico PDF](output/pdf/HU-01_Reporte_tecnico.pdf), [checklist de aceptación](incident-service/CHECKLIST-HU-01.md) y [evidencias](incident-service/evidence/). Verificación: 12 pruebas aprobadas, 94.87 % de cobertura de líneas y Quality Gate de SonarQube aprobado.
+
+Proyecto académico Java/Spring Boot con tres microservicios y persistencia PostgreSQL/MongoDB:
 
 - **Parcel Service**: CRUD de parcelas con ubicación, tipo de suelo y responsable.
 - **Telemetry Service**: recibe y consulta lecturas ambientales de sensores.
+- **Incident Service**: CRUD de incidencias de sensores con MongoDB, Swagger UI y verificación de calidad para HU-01.
 
-Cada microservicio tiene su propia base de datos PostgreSQL. Docker Compose orquesta los dos servicios y sus bases; Hibernate valida el esquema y no altera tablas existentes.
+Parcel y Telemetry tienen cada uno su propia base PostgreSQL; Hibernate valida sus esquemas. Incident utiliza su propia base MongoDB. Docker Compose orquesta los servicios y sus bases; el módulo de incidencias también cuenta con un Compose independiente.
 
 ## Decisiones de seguridad (HU-SEC-001 / SEC-01)
 
@@ -182,12 +189,14 @@ GET https://localhost:8082/api/sensores/sensor-01/lecturas?from=2026-10-01T00:00
 
 ## Ejecutar pruebas
 
-Las pruebas usan H2 en memoria y no requieren que PostgreSQL esté activo. Desde la raíz:
+Las pruebas de Parcel y Telemetry usan H2 en memoria y no requieren que PostgreSQL esté activo. Desde la raíz:
 
 ```powershell
 mvn -f parcel-service/pom.xml test
 mvn -f basica/pom.xml test
 ```
+
+Para HU-01, `mvn -f incident-service/pom.xml test` ejecuta las pruebas unitarias y de contrato web. Con Docker activo, `mvn -f incident-service/pom.xml clean verify` añade la integración con MongoDB real y genera/verifica la cobertura JaCoCo.
 
 ## Alcance del caso
 

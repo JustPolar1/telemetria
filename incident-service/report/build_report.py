@@ -236,5 +236,8 @@ for index, box in enumerate([(260,220,1400,495),(285,575,1395,1007)]):
             ('Vulnerabilidades','0','0'),('Code Smells','0','0'),
         ],[340,200,width-636])
 
+section('Repositorio público')
+paragraph('<link href="https://github.com/JustPolar1/telemetria" color="#007E87">https://github.com/JustPolar1/telemetria</link>',BODY)
+
 pdf.save()
 print(f'{OUTPUT} ({page_number} pages)')
